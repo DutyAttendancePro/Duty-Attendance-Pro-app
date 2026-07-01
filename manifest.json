@@ -1,0 +1,25 @@
+{
+  "name": "Duty Attendance Pro",
+  "short_name": "DutyPro",
+  "description": "Offline-first duty attendance tracker with calendar, shifts, and reports.",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0F1721",
+  "theme_color": "#0F1721",
+  "categories": ["productivity", "business", "utilities"],
+  "icons": [
+    {
+      "src": "https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
