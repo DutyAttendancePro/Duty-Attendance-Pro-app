@@ -1,79 +1,25 @@
 {
-  "id": "/?source=pwa",
   "name": "Duty Attendance Pro",
   "short_name": "DutyPro",
-  "description": "Offline-first duty attendance, shift, and salary tracker with calendar, leave management, and reports.",
-  "start_url": "/index.html?source=pwa",
-  "scope": "/",
+  "description": "Offline-first duty attendance tracker with calendar, shifts, and reports.",
+  "start_url": ".",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui", "browser"],
-  "orientation": "any",
-  "theme_color": "#0F1721",
+  "orientation": "portrait",
   "background_color": "#0F1721",
-  "lang": "en",
-  "dir": "ltr",
+  "theme_color": "#0F1721",
   "categories": ["productivity", "business", "utilities"],
   "icons": [
-    { "src": "icons/icon-72.png", "sizes": "72x72", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-72-maskable.png", "sizes": "72x72", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-96-maskable.png", "sizes": "96x96", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-128-maskable.png", "sizes": "128x128", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-144-maskable.png", "sizes": "144x144", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-152-maskable.png", "sizes": "152x152", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-192-maskable.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-384-maskable.png", "sizes": "384x384", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
-  ],
-  "shortcuts": [
     {
-      "name": "Check In",
-      "short_name": "Check In",
-      "description": "Punch in for your shift",
-      "url": "/index.html?action=checkin",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+      "src": "https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "name": "Check Out",
-      "short_name": "Check Out",
-      "description": "Punch out for your shift",
-      "url": "/index.html?action=checkout",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Calendar",
-      "short_name": "Calendar",
-      "description": "View attendance calendar",
-      "url": "/index.html?view=calendar",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Reports",
-      "short_name": "Reports",
-      "description": "View attendance and salary reports",
-      "url": "/index.html?view=reports",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+      "src": "https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ],
-  "share_target": {
-    "action": "/index.html?action=share",
-    "method": "GET",
-    "params": { "title": "title", "text": "text", "url": "url" }
-  },
-  "protocol_handlers": [
-    { "protocol": "web+dutypro", "url": "/index.html?handler=%s" }
-  ],
-  "file_handlers": [
-    {
-      "action": "/index.html?action=import",
-      "accept": { "application/json": [".json"], "text/csv": [".csv"] }
-    }
-  ],
-  "prefer_related_applications": false
+  ]
 }
