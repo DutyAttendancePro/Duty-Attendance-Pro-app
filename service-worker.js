@@ -1,7 +1,7 @@
 // Duty Attendance Pro - Service Worker
 // Cache-first for static assets, network-first for navigation, offline fallback page.
 
-const CACHE_VERSION = 'dap-v1.0.0';
+const CACHE_VERSION = 'dap-v2.0.0';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
