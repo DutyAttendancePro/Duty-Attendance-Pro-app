@@ -4,1647 +4,386 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Duty Attendance Pro</title>
-<meta name="description" content="Offline-first duty attendance tracker with calendar, shifts, and reports." />
+<meta name="description" content="Offline-first duty attendance, shift, salary, leave, and reports tracker. Install on any device." />
 <meta name="theme-color" content="#0F1721" />
 <meta name="color-scheme" content="dark light" />
 <link rel="manifest" href="manifest.json" />
-<link rel="icon" href="https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png" />
-<link rel="apple-touch-icon" href="https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="DutyPro" />
 <meta name="mobile-web-app-capable" content="yes" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self'; base-uri 'self'; form-action 'self';" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink: #0F1721;
-  --ink-2: #16212E;
-  --ink-3: #1E2C3B;
-  --brass: #C9A24B;
-  --brass-light: #E0BF7A;
-  --brass-dim: #8A723A;
-  --paper: #F3EFE6;
-  --paper-dim: #E7E2D5;
-  --green: #3C7A5C;
-  --green-soft: #2A5641;
-  --rust: #B5482D;
-  --rust-soft: #7A3322;
-  --blue: #3D6B96;
-  --text-hi: #F3EFE6;
-  --text-lo: #9FAAB6;
-  --border: rgba(243,239,230,0.10);
+/* ============ TOKENS ============ */
+:root{
+  --ink:#0F1721;        --ink-2:#16212E;       --ink-3:#1E2C3B;
+  --brass:#C9A24B;       --brass-light:#E0BF7A; --brass-dim:#8A723A;
+  --paper:#F3EFE6;       --paper-dim:#E7E2D5;
+  --green:#3C7A5C;       --green-soft:#2A5641;
+  --rust:#B5482D;        --rust-soft:#7A3322;
+  --blue:#3D6B96;
+  --text-hi:#F3EFE6;     --text-lo:#9FAAB6;
+  --border:rgba(243,239,230,0.10);
   --shadow: 0 12px 32px rgba(0,0,0,0.35);
-  --radius-lg: 24px;
-  --radius-md: 16px;
-  --radius-sm: 10px;
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --bg: var(--ink);
-  --surface: var(--ink-2);
-  --surface-2: var(--ink-3);
-  --fg: var(--text-hi);
-  --fg-dim: var(--text-lo);
-  --accent: var(--brass);
+  --radius-lg:24px; --radius-md:16px; --radius-sm:10px;
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --bg:var(--ink); --surface:var(--ink-2); --surface-2:var(--ink-3);
+  --fg:var(--text-hi); --fg-dim:var(--text-lo); --accent:var(--brass);
   color-scheme: dark;
 }
-[data-theme="light"] {
-  --bg: var(--paper);
-  --surface: #FFFFFF;
-  --surface-2: var(--paper-dim);
-  --fg: #1B2430;
-  --fg-dim: #5C6470;
-  --accent: var(--brass-dim);
-  --border: rgba(20,25,35,0.10);
+[data-theme="light"]{
+  --bg:var(--paper); --surface:#FFFFFF; --surface-2:var(--paper-dim);
+  --fg:#1B2430; --fg-dim:#5C6470; --accent:var(--brass-dim);
+  --border:rgba(20,25,35,0.10);
   --shadow: 0 12px 28px rgba(20,25,35,0.10);
   color-scheme: light;
 }
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  margin: 0;
-  padding: 0;
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--fg); font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
 }
-html, body {
-  height: 100%;
+@media (prefers-reduced-motion: reduce){ *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
+h1,h2,h3,.display{font-family:var(--font-display); letter-spacing:-0.01em;}
+.mono{font-family:var(--font-mono);}
+a{color:inherit;}
+button{font-family:inherit;}
+::selection{ background:var(--accent); color:var(--ink);}
+:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:4px;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border); border-radius:8px;}
+
+/* ============ APP SHELL ============ */
+#app{ display:block; min-height:100vh; visibility:hidden; }
+#app.ready{ visibility:visible; }
+
+/* Splash */
+#splash{
+  position:fixed; inset:0; background:#0F1721; z-index:9999;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+  opacity:1; transition:opacity 0.6s ease;
 }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
+#splash.hide{ opacity:0; }
+#splash.gone{ display:none; }
+.splash-dial{
+  width:88px; height:88px; border-radius:50%; border:5px solid #C9A24B;
+  position:relative; animation:dial-pulse 1.8s ease-in-out infinite;
 }
-h1, h2, h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+.splash-dial::before{
+  content:''; position:absolute; top:50%; left:50%; width:2px; height:30px; background:#C9A24B;
+  transform-origin:bottom center; transform:translate(-50%,-100%) rotate(45deg); border-radius:2px;
+  animation:hand-spin 2.4s linear infinite;
 }
-button {
-  font-family: inherit;
+.splash-dial::after{
+  content:''; position:absolute; top:50%; left:50%; width:5px; height:5px; background:#C9A24B;
+  transform:translate(-50%,-50%); border-radius:50%;
 }
-::selection {
-  background: var(--accent);
-  color: var(--ink);
+@keyframes hand-spin{ from{ transform:translate(-50%,-100%) rotate(0deg);} to{ transform:translate(-50%,-100%) rotate(360deg);} }
+@keyframes dial-pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(201,162,75,0.3);} 50%{ box-shadow:0 0 0 16px rgba(201,162,75,0);} }
+.splash-title{ font-family:var(--font-display); font-size:1.6rem; color:#F3EFE6; font-weight:700; letter-spacing:-0.01em; }
+.splash-sub{ color:#9FAAB6; font-size:0.82rem; text-align:center; }
+.splash-progress{ width:200px; height:3px; background:rgba(201,162,75,0.18); border-radius:999px; overflow:hidden; }
+.splash-bar{ height:100%; width:0%; background:#C9A24B; border-radius:999px; animation:bar-fill 2.2s ease forwards; }
+@keyframes bar-fill{ 0%{width:0%} 40%{width:55%} 80%{width:88%} 100%{width:100%} }
+.splash-ver{ position:absolute; bottom:32px; color:#6B7785; font-size:0.74rem; font-family:var(--font-body); text-align:center; line-height:1.5; }
+
+/* Lock screen */
+#lock{
+  position:fixed; inset:0; background:var(--ink); z-index:9000; display:none;
+  flex-direction:column; align-items:center; justify-content:center; gap:22px; padding:24px;
 }
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+#lock.show{ display:flex; }
+.lock-dial{ width:64px; height:64px; border-radius:50%; background:var(--brass); display:flex; align-items:center; justify-content:center; font-size:26px; color:var(--ink); box-shadow:var(--shadow);}
+.lock-title{ font-family:var(--font-display); color:var(--paper); font-size:1.15rem; font-weight:600;}
+.lock-sub{ color:var(--text-lo); font-size:0.82rem;}
+.pin-dots{ display:flex; gap:14px; margin:6px 0;}
+.pin-dot{ width:14px; height:14px; border-radius:50%; border:2px solid var(--brass-dim); transition:background .15s, transform .15s;}
+.pin-dot.filled{ background:var(--brass); transform:scale(1.1); border-color:var(--brass);}
+.pin-pad{ display:grid; grid-template-columns:repeat(3,68px); gap:14px;}
+.pin-key{
+  width:68px; height:68px; border-radius:50%; border:1px solid var(--border); background:var(--ink-2);
+  color:var(--paper); font-size:1.3rem; font-family:var(--font-display); cursor:pointer; transition:transform .1s, background .15s;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 8px;
+.pin-key:active{ transform:scale(0.92); background:var(--ink-3);}
+.pin-key.ghost{ background:transparent; border:none; color:var(--text-lo); font-size:0.85rem;}
+.lock-error{ color:var(--rust); font-size:0.78rem; height:16px;}
+.lock-bio{ margin-top:4px; background:none; border:1px solid var(--border); color:var(--brass-light); padding:10px 18px; border-radius:999px; font-size:0.82rem; cursor:pointer;}
+
+/* Layout */
+.shell{ display:flex; min-height:100vh; }
+.sidebar{
+  display:none; width:248px; flex-shrink:0; background:var(--surface); border-right:1px solid var(--border);
+  padding:20px 14px; flex-direction:column; gap:4px; position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.side-brand{ display:flex; align-items:center; gap:10px; padding:8px 10px 22px; }
+.side-brand .mark{ width:34px; height:34px; border-radius:50%; border:3px solid var(--brass); flex-shrink:0; position:relative;}
+.side-brand .mark::after{content:'';position:absolute;top:50%;left:50%;width:1.5px;height:10px;background:var(--brass);transform:translate(-50%,-100%) rotate(35deg);transform-origin:bottom;}
+.side-brand b{ font-family:var(--font-display); font-size:0.95rem; }
+.main{ flex:1; min-width:0; padding-bottom:90px; }
+.topbar{
+  position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border); padding:14px 18px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.topbar h1{ font-size:1.05rem; margin:0; }
+.topbar .right{ display:flex; gap:8px; align-items:center;}
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:var(--surface);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--fg); font-size:1rem; transition:background .15s, transform .1s;
+}
+.icon-btn:active{ transform:scale(0.92); }
+.view{ padding:16px 16px 6px; max-width:1080px; margin:0 auto; }
+.view-title{ font-size:1.4rem; margin:6px 0 16px; }
+
+/* Bottom nav (mobile) */
+.bottom-nav{
+  position:fixed; left:0; right:0; bottom:0; z-index:80; background:color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-top:1px solid var(--border);
+  display:flex; padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+.nav-item{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 2px; border-radius:14px;
+  background:none; border:none; color:var(--fg-dim); font-size:0.62rem; cursor:pointer; transition:color .15s, background .15s;
+}
+.nav-item .ic{ font-size:1.15rem; }
+.nav-item.active{ color:var(--accent); background:color-mix(in srgb, var(--accent) 12%, transparent); }
+
+/* Desktop nav inside sidebar */
+.side-link{
+  display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px; color:var(--fg-dim);
+  font-size:0.86rem; cursor:pointer; border:none; background:none; text-align:left; width:100%; transition:background .15s,color .15s;
+}
+.side-link .ic{ width:20px; text-align:center; font-size:1rem;}
+.side-link.active{ background:color-mix(in srgb, var(--accent) 14%, transparent); color:var(--accent); font-weight:600;}
+.side-link:hover{ background:var(--surface-2); }
+.side-foot{ margin-top:auto; padding:10px; font-size:0.7rem; color:var(--fg-dim); border-top:1px solid var(--border); padding-top:14px;}
+
+@media (min-width:900px){
+  .sidebar{ display:flex; }
+  .bottom-nav{ display:none; }
+  .main{ padding-bottom:24px; }
+  .view{ padding:24px 32px; }
 }
 
-/* ===== SPLASH ===== */
-#splash {
-  position: fixed;
-  inset: 0;
-  background: #0F1721;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  opacity: 1;
-  transition: opacity 0.6s ease;
+/* ============ CARDS / COMPONENTS ============ */
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:18px; box-shadow:var(--shadow);
 }
-#splash.hide {
-  opacity: 0;
-}
-#splash.gone {
-  display: none;
-}
-.splash-icon {
-  width: 100px;
-  height: 100px;
-  border-radius: 24px;
-  background: var(--brass);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: var(--ink);
-  box-shadow: 0 0 40px rgba(201, 162, 75, 0.2);
-}
-.splash-icon img {
-  width: 80px;
-  height: 80px;
-  border-radius: 16px;
-  object-fit: contain;
-}
-.splash-dial {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  border: 5px solid #C9A24B;
-  position: relative;
-  animation: dial-pulse 1.8s ease-in-out infinite;
-}
-.splash-dial::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2px;
-  height: 30px;
-  background: #C9A24B;
-  transform-origin: bottom center;
-  transform: translate(-50%, -100%) rotate(45deg);
-  border-radius: 2px;
-  animation: hand-spin 2.4s linear infinite;
-}
-.splash-dial::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  background: #C9A24B;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-}
-@keyframes hand-spin {
-  from {
-    transform: translate(-50%, -100%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -100%) rotate(360deg);
-  }
-}
-@keyframes dial-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(201, 162, 75, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 0 16px rgba(201, 162, 75, 0);
-  }
-}
-.splash-title {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  color: #F3EFE6;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-.splash-sub {
-  color: #9FAAB6;
-  font-size: 0.82rem;
-  text-align: center;
-}
-.splash-progress {
-  width: 200px;
-  height: 3px;
-  background: rgba(201, 162, 75, 0.18);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.splash-bar {
-  height: 100%;
-  width: 0%;
-  background: #C9A24B;
-  border-radius: 999px;
-  animation: bar-fill 2.2s ease forwards;
-}
-@keyframes bar-fill {
-  0% {
-    width: 0%
-  }
-  40% {
-    width: 55%
-  }
-  80% {
-    width: 88%
-  }
-  100% {
-    width: 100%
-  }
-}
-.splash-ver {
-  position: absolute;
-  bottom: 32px;
-  color: #6B7785;
-  font-size: 0.74rem;
-  font-family: var(--font-body);
-  text-align: center;
-  line-height: 1.5;
-}
-.splash-ver strong {
-  color: #E0BF7A;
-}
+.card + .card{ margin-top:14px; }
+.grid{ display:grid; gap:14px; }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+@media (max-width:520px){ .grid-3{ grid-template-columns:repeat(2,1fr);} }
+@media (min-width:700px){ .grid-2{ grid-template-columns:repeat(2,1fr);} }
 
-/* ===== APP ===== */
-#app {
-  display: block;
-  min-height: 100vh;
-  visibility: hidden;
-}
-#app.ready {
-  visibility: visible;
-}
+.stat{ display:flex; flex-direction:column; gap:4px; }
+.stat .label{ font-size:0.7rem; color:var(--fg-dim); text-transform:uppercase; letter-spacing:0.05em; }
+.stat .value{ font-family:var(--font-display); font-size:1.35rem; font-weight:700; }
+.stat .value.mono{ font-family:var(--font-mono); }
 
-/* ===== TOP BAR ===== */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.topbar h1 {
-  font-size: 1.1rem;
-  margin: 0;
-}
-.topbar .right {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.icon-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--fg);
-  font-size: 1rem;
-  transition: background 0.15s, transform 0.1s;
-}
-.icon-btn:active {
-  transform: scale(0.92);
-}
+.pill{ display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:999px; font-size:0.7rem; font-weight:600; }
+.pill.green{ background:color-mix(in srgb, var(--green) 28%, transparent); color:#7CCBA2; }
+.pill.rust{ background:color-mix(in srgb, var(--rust) 25%, transparent); color:#F0917B; }
+.pill.brass{ background:color-mix(in srgb, var(--brass) 22%, transparent); color:var(--brass-light); }
+.pill.blue{ background:color-mix(in srgb, var(--blue) 25%, transparent); color:#8FC1EE; }
+.pill.gray{ background:var(--surface-2); color:var(--fg-dim); }
 
-/* ===== MAIN VIEW ===== */
-.view {
-  padding: 16px 16px 100px;
-  max-width: 480px;
-  margin: 0 auto;
+.btn{
+  border:none; border-radius:999px; padding:12px 20px; font-size:0.88rem; font-weight:600; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:transform .1s, filter .15s, background .15s;
 }
+.btn:active{ transform:scale(0.97); }
+.btn-primary{ background:var(--accent); color:var(--ink); }
+.btn-primary:hover{ filter:brightness(1.08); }
+.btn-outline{ background:transparent; border:1px solid var(--border); color:var(--fg); }
+.btn-outline:hover{ background:var(--surface-2); }
+.btn-ghost{ background:var(--surface-2); color:var(--fg); }
+.btn-danger{ background:color-mix(in srgb, var(--rust) 85%, black); color:#FBD9D0; }
+.btn-block{ width:100%; }
+.btn-lg{ padding:16px 22px; font-size:0.98rem; }
+.btn:disabled{ opacity:0.45; cursor:not-allowed; }
 
-/* ===== CALENDAR ===== */
-.cal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.field label{ font-size:0.74rem; color:var(--fg-dim); font-weight:600; text-transform:uppercase; letter-spacing:0.04em; }
+.field input, .field select, .field textarea{
+  background:var(--surface-2); border:1px solid var(--border); color:var(--fg); border-radius:var(--radius-sm);
+  padding:11px 13px; font-size:0.92rem; font-family:inherit; width:100%;
 }
-.cal-header h2 {
-  font-size: 1.2rem;
-}
-.cal-nav {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--fg);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-.cal-nav:active {
-  transform: scale(0.92);
-}
-.cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-.cal-dow {
-  text-align: center;
-  font-size: 0.6rem;
-  color: var(--fg-dim);
-  font-weight: 600;
-  padding: 4px 0;
-  text-transform: uppercase;
-}
-.cal-cell {
-  aspect-ratio: 1;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface-2);
-  cursor: pointer;
-  font-size: 0.75rem;
-  border: 1px solid transparent;
-  transition: transform 0.1s, background 0.15s;
-  position: relative;
-}
-.cal-cell:active {
-  transform: scale(0.93);
-}
-.cal-cell.empty {
-  background: transparent;
-  cursor: default;
-}
-.cal-cell.today {
-  border-color: var(--accent);
-}
-.cal-cell .dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  margin-top: 2px;
-}
-.cal-cell.present {
-  background: color-mix(in srgb, var(--green) 30%, var(--surface-2));
-}
-.cal-cell.present .dot {
-  background: var(--green);
-}
-.cal-cell.halfday {
-  background: color-mix(in srgb, var(--brass) 25%, var(--surface-2));
-}
-.cal-cell.halfday .dot {
-  background: var(--brass);
-}
-.cal-cell.leave {
-  background: color-mix(in srgb, var(--blue) 25%, var(--surface-2));
-}
-.cal-cell.leave .dot {
-  background: var(--blue);
-}
-.cal-cell.sick {
-  background: color-mix(in srgb, #7B61B5 25%, var(--surface-2));
-}
-.cal-cell.sick .dot {
-  background: #7B61B5;
-}
-.cal-cell.holiday {
-  background: color-mix(in srgb, var(--rust) 20%, var(--surface-2));
-}
-.cal-cell.holiday .dot {
-  background: var(--rust);
-}
-.cal-cell.off {
-  background: color-mix(in srgb, #6B7785 20%, var(--surface-2));
-}
-.cal-cell.off .dot {
-  background: #6B7785;
-}
-.cal-cell .date-num {
-  font-weight: 600;
-}
+.field textarea{ resize:vertical; min-height:64px; }
+.field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+.field-row{ display:flex; gap:10px; }
+.field-row .field{ flex:1; }
+.switch-row{ display:flex; align-items:center; justify-content:space-between; padding:10px 2px; border-bottom:1px solid var(--border); }
+.switch-row:last-child{ border-bottom:none; }
+.switch-row .lbl{ font-size:0.88rem; }
+.switch-row .sub{ font-size:0.72rem; color:var(--fg-dim); }
+.switch{ position:relative; width:46px; height:26px; flex-shrink:0; }
+.switch input{ opacity:0; width:0; height:0; }
+.switch .track{ position:absolute; inset:0; background:var(--surface-2); border:1px solid var(--border); border-radius:999px; cursor:pointer; transition:background .15s; }
+.switch .thumb{ position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:var(--fg-dim); transition:transform .18s, background .18s; }
+.switch input:checked + .track{ background:color-mix(in srgb, var(--accent) 35%, transparent); border-color:var(--accent); }
+.switch input:checked + .track .thumb{ transform:translateX(20px); background:var(--accent); }
 
-/* ===== STATS BAR ===== */
-.stats-bar {
-  display: flex;
-  gap: 12px;
-  margin: 14px 0 18px;
-  flex-wrap: wrap;
-}
-.stat-item {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 8px 14px;
-  flex: 1;
-  min-width: 60px;
-  text-align: center;
-}
-.stat-item .num {
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-.stat-item .lbl {
-  font-size: 0.6rem;
-  color: var(--fg-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.streak-box {
-  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  text-align: center;
-  margin-bottom: 16px;
-}
-.streak-box .streak-num {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-.streak-box .streak-lbl {
-  font-size: 0.7rem;
-  color: var(--fg-dim);
-}
+.empty{ text-align:center; padding:36px 16px; color:var(--fg-dim); }
+.empty .ic{ font-size:2rem; margin-bottom:10px; }
+.empty .t{ font-size:0.92rem; color:var(--fg); font-weight:600; margin-bottom:4px;}
+.empty .s{ font-size:0.8rem; }
 
-/* ===== DUTY STATUS ===== */
-.duty-status-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin: 12px 0 16px;
+.toast-wrap{ position:fixed; top:calc(14px + env(safe-area-inset-top)); left:0; right:0; display:flex; flex-direction:column; align-items:center; gap:8px; z-index:9500; pointer-events:none; }
+.toast{
+  background:var(--ink-2); color:var(--paper); border:1px solid var(--border); padding:11px 18px; border-radius:999px;
+  font-size:0.84rem; box-shadow:var(--shadow); animation:toast-in .25s ease; display:flex; align-items:center; gap:8px;
 }
-.duty-btn {
-  padding: 10px 6px;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--fg);
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-.duty-btn:active {
-  transform: scale(0.95);
-}
-.duty-btn .emoji {
-  display: block;
-  font-size: 1.3rem;
-  margin-bottom: 2px;
-}
-.duty-btn.active {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
-}
-.duty-btn.present.active {
-  border-color: var(--green);
-  background: color-mix(in srgb, var(--green) 25%, var(--surface));
-}
-.duty-btn.halfday.active {
-  border-color: var(--brass);
-  background: color-mix(in srgb, var(--brass) 25%, var(--surface));
-}
-.duty-btn.leave.active {
-  border-color: var(--blue);
-  background: color-mix(in srgb, var(--blue) 25%, var(--surface));
-}
-.duty-btn.sick.active {
-  border-color: #7B61B5;
-  background: color-mix(in srgb, #7B61B5 25%, var(--surface));
-}
-.duty-btn.holiday.active {
-  border-color: var(--rust);
-  background: color-mix(in srgb, var(--rust) 25%, var(--surface));
-}
-.duty-btn.off.active {
-  border-color: #6B7785;
-  background: color-mix(in srgb, #6B7785 25%, var(--surface));
-}
+@keyframes toast-in{ from{ opacity:0; transform:translateY(-10px);} to{ opacity:1; transform:translateY(0);} }
 
-/* ===== SHIFT ===== */
-.shift-row {
-  display: flex;
-  gap: 8px;
-  margin: 12px 0 16px;
+.modal-bg{ position:fixed; inset:0; background:rgba(8,12,18,0.62); backdrop-filter:blur(3px); z-index:1000; display:none; align-items:flex-end; justify-content:center; }
+.modal-bg.show{ display:flex; }
+@media (min-width:640px){ .modal-bg{ align-items:center; } }
+.modal{
+  background:var(--surface); border:1px solid var(--border); border-radius:22px 22px 0 0; width:100%; max-width:480px;
+  max-height:88vh; overflow-y:auto; padding:20px; animation:modal-up .22s ease;
 }
-.shift-btn {
-  flex: 1;
-  padding: 10px;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--border);
-  background: var(--surface);
-  color: var(--fg);
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-.shift-btn:active {
-  transform: scale(0.95);
-}
-.shift-btn.active {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
-}
+@media (min-width:640px){ .modal{ border-radius:22px; } }
+@keyframes modal-up{ from{ transform:translateY(24px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
+.modal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.modal-head h3{ margin:0; font-size:1.05rem; }
 
-/* ===== INPUT FIELDS ===== */
-.input-row {
-  display: flex;
-  gap: 12px;
-  margin: 12px 0 16px;
+/* Punch dial - signature element */
+.punch-wrap{ display:flex; flex-direction:column; align-items:center; gap:14px; padding:10px 0 4px; }
+.punch{
+  position:relative; width:172px; height:172px; border-radius:50%;
+  background: conic-gradient(var(--accent) calc(var(--pct,0)*1%), var(--surface-2) 0);
+  display:flex; align-items:center; justify-content:center; transition:background 1s ease;
 }
-.input-group {
-  flex: 1;
-}
-.input-group label {
-  display: block;
-  font-size: 0.65rem;
-  color: var(--fg-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 4px;
-}
-.input-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  color: var(--fg);
-  font-size: 0.85rem;
-  font-family: var(--font-mono);
-}
-.input-group input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-}
+.punch::before{ content:''; position:absolute; inset:10px; border-radius:50%; background:var(--surface); border:1px solid var(--border); }
+.punch-inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+.punch-inner .t{ font-family:var(--font-mono); font-size:1.5rem; font-weight:700; }
+.punch-inner .l{ font-size:0.66rem; color:var(--fg-dim); text-transform:uppercase; letter-spacing:0.06em; }
+.punch-actions{ display:flex; gap:10px; width:100%; }
 
-/* ===== BUTTONS ===== */
-.btn {
-  border: none;
-  border-radius: 999px;
-  padding: 12px 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: transform 0.1s, filter 0.15s;
+/* Calendar */
+.cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+.cal-dow{ text-align:center; font-size:0.65rem; color:var(--fg-dim); font-weight:600; padding-bottom:4px;}
+.cal-cell{
+  aspect-ratio:1; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:var(--surface-2); cursor:pointer; position:relative; font-size:0.8rem; border:1px solid transparent; transition:transform .1s;
 }
-.btn:active {
-  transform: scale(0.97);
-}
-.btn-primary {
-  background: var(--accent);
-  color: var(--ink);
-}
-.btn-primary:active {
-  filter: brightness(0.9);
-}
-.btn-danger {
-  background: color-mix(in srgb, var(--rust) 85%, black);
-  color: #FBD9D0;
-}
-.btn-outline {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--fg);
-}
-.btn-block {
-  width: 100%;
-}
-.btn-group {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-.btn-group .btn {
-  flex: 1;
-}
+.cal-cell:active{ transform:scale(0.93); }
+.cal-cell.empty{ background:transparent; cursor:default; }
+.cal-cell .dot{ width:5px; height:5px; border-radius:50%; margin-top:3px; }
+.cal-cell.today{ border-color:var(--accent); }
+.cal-cell.present{ background:color-mix(in srgb, var(--green) 26%, var(--surface-2)); }
+.cal-cell.absent{ background:color-mix(in srgb, var(--rust) 22%, var(--surface-2)); }
+.cal-cell.leave{ background:color-mix(in srgb, var(--blue) 22%, var(--surface-2)); }
+.cal-cell.holiday{ background:color-mix(in srgb, var(--brass) 20%, var(--surface-2)); }
+.cal-legend{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; font-size:0.72rem; color:var(--fg-dim); }
+.cal-legend span{ display:inline-flex; align-items:center; gap:5px; }
+.cal-legend i{ width:9px; height:9px; border-radius:50%; display:inline-block; }
 
-/* ===== TOAST ===== */
-.toast-wrap {
-  position: fixed;
-  top: calc(14px + env(safe-area-inset-top));
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 9500;
-  pointer-events: none;
-}
-.toast {
-  background: var(--ink-2);
-  color: var(--paper);
-  border: 1px solid var(--border);
-  padding: 10px 18px;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  box-shadow: var(--shadow);
-  animation: toast-in 0.25s ease;
-}
-@keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.seg{ display:flex; background:var(--surface-2); border-radius:999px; padding:3px; gap:2px; }
+.seg button{ flex:1; border:none; background:none; padding:8px 10px; border-radius:999px; font-size:0.78rem; color:var(--fg-dim); cursor:pointer; font-weight:600; }
+.seg button.active{ background:var(--accent); color:var(--ink); }
 
-/* ===== MODAL ===== */
-.modal-bg {
-  position: fixed;
-  inset: 0;
-  background: rgba(8, 12, 18, 0.65);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-}
-.modal-bg.show {
-  display: flex;
-}
-@media (min-width: 640px) {
-  .modal-bg {
-    align-items: center;
-  }
-}
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 22px 22px 0 0;
-  width: 100%;
-  max-width: 420px;
-  max-height: 88vh;
-  overflow-y: auto;
-  padding: 20px;
-  animation: modal-up 0.22s ease;
-}
-@media (min-width: 640px) {
-  .modal {
-    border-radius: 22px;
-  }
-}
-@keyframes modal-up {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 14px;
-}
-.modal-head h3 {
-  margin: 0;
-  font-size: 1.05rem;
-}
-.modal-close {
-  background: none;
-  border: none;
-  color: var(--fg-dim);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 4px 8px;
-}
-.modal .duty-status-grid {
-  grid-template-columns: repeat(3, 1fr);
-}
+.list-row{ display:flex; align-items:center; gap:12px; padding:12px 4px; border-bottom:1px solid var(--border); }
+.list-row:last-child{ border-bottom:none; }
+.list-row .ic-box{ width:38px; height:38px; border-radius:12px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem; }
+.list-row .body{ flex:1; min-width:0; }
+.list-row .ttl{ font-size:0.88rem; font-weight:600; }
+.list-row .sub{ font-size:0.74rem; color:var(--fg-dim); margin-top:2px; }
+.list-row .meta{ text-align:right; font-size:0.78rem; flex-shrink:0; }
 
-/* ===== BOTTOM NAV ===== */
-.bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 80;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid var(--border);
-  display: flex;
-  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
-}
-.nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 6px 2px;
-  border-radius: 14px;
-  background: none;
-  border: none;
-  color: var(--fg-dim);
-  font-size: 0.6rem;
-  cursor: pointer;
-  transition: color 0.15s, background 0.15s;
-}
-.nav-item .ic {
-  font-size: 1.1rem;
-}
-.nav-item.active {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-}
+.search-box{ position:relative; margin-bottom:14px; }
+.search-box input{ width:100%; padding:12px 14px 12px 40px; border-radius:999px; border:1px solid var(--border); background:var(--surface); color:var(--fg); font-size:0.88rem; }
+.search-box .ic{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--fg-dim); }
 
-/* ===== MISC ===== */
-.muted {
-  color: var(--fg-dim);
-}
-.center {
-  text-align: center;
-}
-.hidden {
-  display: none !important;
-}
-.mt-8 {
-  margin-top: 8px;
-}
-.mt-12 {
-  margin-top: 12px;
-}
-.mt-16 {
-  margin-top: 16px;
-}
-.flex {
-  display: flex;
-}
-.between {
-  justify-content: space-between;
-}
-.items-center {
-  align-items: center;
-}
-.gap-8 {
-  gap: 8px;
-}
-.gap-10 {
-  gap: 10px;
-}
-.w-full {
-  width: 100%;
-}
+table.report-table{ width:100%; border-collapse:collapse; font-size:0.82rem; }
+table.report-table th, table.report-table td{ padding:9px 8px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap; }
+table.report-table th{ color:var(--fg-dim); font-weight:600; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.03em; }
+.table-scroll{ overflow-x:auto; }
 
-/* ===== DAY DETAIL ===== */
-.day-detail .status-badge {
-  display: inline-block;
-  padding: 4px 14px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.status-badge.present {
-  background: color-mix(in srgb, var(--green) 30%, transparent);
-  color: #7CCBA2;
-}
-.status-badge.halfday {
-  background: color-mix(in srgb, var(--brass) 30%, transparent);
-  color: var(--brass-light);
-}
-.status-badge.leave {
-  background: color-mix(in srgb, var(--blue) 30%, transparent);
-  color: #8FC1EE;
-}
-.status-badge.sick {
-  background: color-mix(in srgb, #7B61B5 30%, transparent);
-  color: #C4B0E0;
-}
-.status-badge.holiday {
-  background: color-mix(in srgb, var(--rust) 30%, transparent);
-  color: #F0917B;
-}
-.status-badge.off {
-  background: color-mix(in srgb, #6B7785 30%, transparent);
-  color: #B0B8C0;
-}
+canvas.chart{ width:100%; height:180px; display:block; }
 
-/* ===== INSTALL BANNER ===== */
-.install-banner {
-  position: fixed;
-  bottom: 80px;
-  left: 16px;
-  right: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  z-index: 70;
-  box-shadow: var(--shadow);
+.fab{
+  position:fixed; right:18px; bottom:84px; z-index:60; width:58px; height:58px; border-radius:50%;
+  background:var(--accent); color:var(--ink); border:none; font-size:1.5rem; box-shadow:var(--shadow); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:transform .15s;
 }
-.install-banner.show {
-  display: flex;
-}
-.install-banner .app-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.install-banner .app-info img {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-}
-.install-banner .app-info .name {
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-.install-banner .app-info .desc {
-  font-size: 0.7rem;
-  color: var(--fg-dim);
-}
-.install-banner .install-btn {
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: none;
-  background: var(--accent);
-  color: var(--ink);
-  font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.install-banner .install-btn:active {
-  transform: scale(0.95);
-}
+.fab:active{ transform:scale(0.9) rotate(8deg); }
+@media (min-width:900px){ .fab{ bottom:24px; } }
 
-@media (min-width: 900px) {
-  .install-banner {
-    bottom: 24px;
-    max-width: 400px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
+.skeleton{ background:linear-gradient(90deg,var(--surface-2) 25%,var(--surface) 37%,var(--surface-2) 63%); background-size:400% 100%; animation:sk 1.4s ease infinite; border-radius:10px; }
+@keyframes sk{ 0%{background-position:100% 0;} 100%{background-position:0 0;} }
+
+.hidden{ display:none !important; }
+.muted{ color:var(--fg-dim); }
+.center{ text-align:center; }
+.mt-4{ margin-top:4px;} .mt-8{ margin-top:8px;} .mt-14{ margin-top:14px;} .mt-20{ margin-top:20px;}
+.flex{ display:flex; } .between{ justify-content:space-between; } .items-center{ align-items:center; } .gap-8{ gap:8px;} .gap-10{gap:10px;} .wrap{flex-wrap:wrap;}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
+<!-- Splash -->
 <div id="splash">
   <div class="splash-dial"></div>
   <div class="splash-title">Duty Attendance Pro</div>
-  <div class="splash-sub">Your offline-first duty tracker</div>
-  <div class="splash-progress"><div class="splash-bar"></div></div>
-  <div class="splash-ver">Developed by <strong>Samsad Ansari</strong><br>v1.0.0</div>
+  <div class="splash-sub">Your offline-first attendance tracker</div>
+  <div class="splash-progress"><div class="splash-bar" id="splashBar"></div></div>
+  <div class="splash-ver">Developed by <strong style="color:#E0BF7A">Samsad Ansari</strong><br>v1.0.0</div>
 </div>
 
-<!-- TOAST -->
-<div class="toast-wrap" id="toastWrap"></div>
-
-<!-- INSTALL BANNER -->
-<div class="install-banner" id="installBanner">
-  <div class="app-info">
-    <img src="https://i.ibb.co/YTNWS508/file-000000009ff87208bf1a1bb39ef7a58d.png" alt="Duty Attendance Pro" />
-    <div>
-      <div class="name">Duty Attendance Pro</div>
-      <div class="desc">Track your duty easily</div>
-    </div>
-  </div>
-  <button class="install-btn" id="installBtn">Install</button>
+<!-- PIN Lock -->
+<div id="lock">
+  <div class="lock-dial">🔒</div>
+  <div class="lock-title" id="lockTitle">Enter PIN</div>
+  <div class="lock-sub" id="lockSub">Your data stays on this device</div>
+  <div class="pin-dots" id="pinDots"></div>
+  <div class="lock-error" id="lockError"></div>
+  <div class="pin-pad" id="pinPad"></div>
+  <button class="lock-bio hidden" id="bioBtn">Use biometric unlock</button>
 </div>
 
-<!-- APP -->
+<div id="toastWrap" class="toast-wrap"></div>
+
+<!-- App -->
 <div id="app">
-  <!-- Top Bar -->
-  <header class="topbar">
-    <h1 id="pageTitle">Duty Attendance</h1>
-    <div class="right">
-      <button class="icon-btn" id="themeBtn" title="Toggle theme">🌙</button>
-    </div>
-  </header>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-brand"><div class="mark"></div><b>Duty Attendance</b></div>
+      <nav id="sideNav"></nav>
+      <div class="side-foot">Samsad Ansari · v1.0.0<br>Offline-ready PWA</div>
+    </aside>
 
-  <!-- Main View -->
-  <div class="view" id="view"></div>
+    <main class="main">
+      <header class="topbar">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="right">
+          <button class="icon-btn" id="searchBtn" title="Search" aria-label="Search">🔎</button>
+          <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+          <button class="icon-btn hidden" id="installBtn" title="Install app" aria-label="Install app">⬇️</button>
+        </div>
+      </header>
+      <div class="view" id="view"></div>
+    </main>
+  </div>
 
-  <!-- Bottom Nav -->
+  <button class="fab" id="fab" title="Quick check-in" aria-label="Quick check-in">⏱️</button>
+
   <nav class="bottom-nav" id="bottomNav"></nav>
 </div>
 
-<!-- MODAL -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal" id="modalBody"></div>
-</div>
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalBody"></div></div>
 
-<script>
-(function() {
-  'use strict';
-
-  // ========== SERVICE WORKER REGISTRATION ==========
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js')
-        .then(function(reg) {
-          console.log('✅ Service Worker registered successfully!');
-        })
-        .catch(function(err) {
-          console.log('❌ Service Worker registration failed: ' + err);
-        });
-    });
-  }
-
-  // ========== PWA INSTALL ==========
-  let deferredPrompt = null;
-  const installBanner = document.getElementById('installBanner');
-  const installBtn = document.getElementById('installBtn');
-
-  window.addEventListener('beforeinstallprompt', function(e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBanner.classList.add('show');
-  });
-
-  installBtn.addEventListener('click', function() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function(choiceResult) {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('✅ User accepted install');
-          installBanner.classList.remove('show');
-        } else {
-          console.log('❌ User dismissed install');
-        }
-        deferredPrompt = null;
-      });
-    }
-  });
-
-  window.addEventListener('appinstalled', function() {
-    console.log('✅ App installed successfully');
-    installBanner.classList.remove('show');
-  });
-
-  // ========== BACK BUTTON STACK ==========
-  const modalStack = [];
-  let isModalOpen = false;
-
-  // ========== DATA ==========
-  function getData() {
-    try {
-      return JSON.parse(localStorage.getItem('duty_attendance_data')) || { entries: {} };
-    } catch { return { entries: {} }; }
-  }
-
-  function saveData(data) {
-    localStorage.setItem('duty_attendance_data', JSON.stringify(data));
-  }
-
-  function getEntry(date) {
-    const data = getData();
-    return data.entries[date] || null;
-  }
-
-  function saveEntry(date, entry) {
-    const data = getData();
-    data.entries[date] = entry;
-    saveData(data);
-  }
-
-  function deleteEntry(date) {
-    const data = getData();
-    delete data.entries[date];
-    saveData(data);
-  }
-
-  function getAllEntries() {
-    const data = getData();
-    return data.entries;
-  }
-
-  // ========== HELPERS ==========
-  function todayStr() {
-    return new Date().toISOString().split('T')[0];
-  }
-
-  function formatDate(dateStr) {
-    const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  function getMonthDays(year, month) {
-    return new Date(year, month, 0).getDate();
-  }
-
-  function getDateStr(year, month, day) {
-    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  }
-
-  function getDayOfWeek(year, month, day) {
-    return new Date(year, month - 1, day).getDay();
-  }
-
-  function getStreak(entries) {
-    let streak = 0;
-    const today = todayStr();
-    const dates = Object.keys(entries).sort();
-    if (dates.length === 0) return 0;
-
-    let checkDate = new Date();
-    while (true) {
-      const dateStr = checkDate.toISOString().split('T')[0];
-      if (entries[dateStr] && entries[dateStr].status === 'present') {
-        streak++;
-        checkDate.setDate(checkDate.getDate() - 1);
-      } else if (dateStr === today && !entries[dateStr]) {
-        checkDate.setDate(checkDate.getDate() - 1);
-      } else {
-        break;
-      }
-    }
-    return streak;
-  }
-
-  // ========== TOAST ==========
-  function showToast(msg) {
-    const wrap = document.getElementById('toastWrap');
-    const t = document.createElement('div');
-    t.className = 'toast';
-    t.textContent = msg;
-    wrap.appendChild(t);
-    setTimeout(() => {
-      t.style.opacity = '0';
-      t.style.transform = 'translateY(-8px)';
-      setTimeout(() => t.remove(), 300);
-    }, 2500);
-  }
-
-  // ========== MODAL WITH BACK STACK ==========
-  function openModal(html) {
-    const bg = document.getElementById('modalBg');
-    const body = document.getElementById('modalBody');
-    body.innerHTML = html;
-    bg.classList.add('show');
-    isModalOpen = true;
-    modalStack.push('modal');
-    history.pushState({ modal: true }, '');
-  }
-
-  function closeModal() {
-    const bg = document.getElementById('modalBg');
-    bg.classList.remove('show');
-    isModalOpen = false;
-    if (modalStack.length > 0) modalStack.pop();
-    if (window.history.state && window.history.state.modal) {
-      history.back();
-    }
-  }
-
-  window.openModal = openModal;
-  window.closeModal = closeModal;
-
-  document.getElementById('modalBg').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  // ========== BACK BUTTON HANDLER ==========
-  window.addEventListener('popstate', function(event) {
-    if (isModalOpen) {
-      closeModal();
-      event.preventDefault();
-      return;
-    }
-    
-    if (!isModalOpen && modalStack.length === 0) {
-      if (window.confirm('Exit Duty Attendance Pro?')) {
-        if (window.navigator && window.navigator.app) {
-          window.navigator.app.exitApp();
-        } else {
-          window.history.back();
-        }
-      } else {
-        history.pushState(null, '');
-      }
-    }
-  });
-
-  history.pushState({ home: true }, '');
-
-  // ========== SPLASH ==========
-  const splash = document.getElementById('splash');
-  const app = document.getElementById('app');
-
-  setTimeout(function() {
-    splash.classList.add('hide');
-    setTimeout(function() {
-      splash.classList.add('gone');
-      app.classList.add('ready');
-      splash.style.display = 'none';
-    }, 600);
-  }, 2500);
-
-  // ========== THEME ==========
-  const themeBtn = document.getElementById('themeBtn');
-  let dark = true;
-  themeBtn.addEventListener('click', function() {
-    dark = !dark;
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    themeBtn.textContent = dark ? '🌙' : '☀️';
-    showToast(dark ? 'Dark mode' : 'Light mode');
-  });
-
-  // ========== RENDER CALENDAR ==========
-  let currentYear = new Date().getFullYear();
-  let currentMonth = new Date().getMonth() + 1;
-  let selectedDate = todayStr();
-
-  function renderCalendar() {
-    const view = document.getElementById('view');
-    const entries = getAllEntries();
-    const days = getMonthDays(currentYear, currentMonth);
-    const firstDay = getDayOfWeek(currentYear, currentMonth, 1);
-    const today = todayStr();
-    const streak = getStreak(entries);
-
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
-    const todayEntry = entries[today];
-    const todayStatus = todayEntry ? todayEntry.status : null;
-    const todayShift = todayEntry ? todayEntry.shift : null;
-    const todayOT = todayEntry ? todayEntry.ot : 0;
-    const todayLate = todayEntry ? todayEntry.late : 0;
-
-    view.innerHTML = `
-      <div class="cal-header">
-        <button class="cal-nav" onclick="changeMonth(-1)">◀</button>
-        <h2>${monthNames[currentMonth - 1]} ${currentYear}</h2>
-        <button class="cal-nav" onclick="changeMonth(1)">▶</button>
-      </div>
-
-      <div class="cal-grid">
-        ${['S','M','T','W','T','F','S'].map(d => `<div class="cal-dow">${d}</div>`).join('')}
-        ${Array(firstDay).fill('<div class="cal-cell empty"></div>').join('')}
-        ${Array.from({length: days}, (_, i) => {
-          const day = i + 1;
-          const dateStr = getDateStr(currentYear, currentMonth, day);
-          const isToday = dateStr === today;
-          const entry = entries[dateStr];
-          let cls = 'cal-cell';
-          if (isToday) cls += ' today';
-          if (entry) {
-            cls += ' ' + entry.status;
-          }
-          return `<div class="${cls}" onclick="openDayDetail('${dateStr}')">
-            <span class="date-num">${day}</span>
-            ${entry ? `<span class="dot"></span>` : ''}
-          </div>`;
-        }).join('')}
-      </div>
-
-      <div class="streak-box">
-        <div class="streak-num">${streak} Day Streak! 🏆</div>
-        <div class="streak-lbl">Keep going! You're on fire!</div>
-      </div>
-
-      <div class="stats-bar">
-        <div class="stat-item">
-          <div class="num">${todayStatus ? todayStatus.charAt(0).toUpperCase() + todayStatus.slice(1) : '—'}</div>
-          <div class="lbl">Today</div>
-        </div>
-        <div class="stat-item">
-          <div class="num">${todayShift || '—'}</div>
-          <div class="lbl">Shift</div>
-        </div>
-        <div class="stat-item">
-          <div class="num">${todayOT || 0}h</div>
-          <div class="lbl">OT Hours</div>
-        </div>
-        <div class="stat-item">
-          <div class="num">${todayLate || 0}m</div>
-          <div class="lbl">Late (mins)</div>
-        </div>
-      </div>
-
-      ${todayEntry ? `
-        <div class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px;margin-bottom:12px;">
-          <div class="flex between items-center">
-            <div>
-              <span class="status-badge ${todayEntry.status}">${todayEntry.status.charAt(0).toUpperCase() + todayEntry.status.slice(1)}</span>
-              <span style="margin-left:8px;font-size:0.8rem;">${todayEntry.shift || 'No shift'}</span>
-            </div>
-            <span style="font-size:0.75rem;color:var(--fg-dim);">OT: ${todayEntry.ot || 0}h | Late: ${todayEntry.late || 0}m</span>
-          </div>
-        </div>
-      ` : `
-        <div style="text-align:center;padding:12px;color:var(--fg-dim);font-size:0.85rem;">
-          No Entry Today
-        </div>
-      `}
-
-      <button class="btn btn-primary btn-block" onclick="openAddDuty()">
-        ➕ Add Today's Duty
-      </button>
-
-      <div style="margin-top:16px;display:flex;gap:8px;">
-        <button class="btn btn-outline" style="flex:1;font-size:0.7rem;" onclick="openReport()">📊 Report</button>
-        <button class="btn btn-outline" style="flex:1;font-size:0.7rem;" onclick="openGraph()">📈 Graph</button>
-        <button class="btn btn-outline" style="flex:1;font-size:0.7rem;" onclick="openSettings()">⚙️ Settings</button>
-      </div>
-    `;
-
-    document.getElementById('pageTitle').textContent = 'Duty Attendance';
-  }
-
-  // ========== MONTH NAVIGATION ==========
-  window.changeMonth = function(delta) {
-    currentMonth += delta;
-    if (currentMonth > 12) {
-      currentMonth = 1;
-      currentYear++;
-    } else if (currentMonth < 1) {
-      currentMonth = 12;
-      currentYear--;
-    }
-    renderCalendar();
-  };
-
-  // ========== OPEN DAY DETAIL ==========
-  window.openDayDetail = function(dateStr) {
-    const entry = getEntry(dateStr);
-    if (!entry) {
-      showToast('No entry for ' + formatDate(dateStr));
-      return;
-    }
-
-    const statusLabels = {
-      present: '✅ Present',
-      halfday: '🌓 Half Day',
-      leave: '🏖️ Leave',
-      sick: '🤒 Sick',
-      holiday: '🎉 Holiday',
-      off: '📴 Off'
-    };
-
-    const html = `
-      <div class="modal-head">
-        <h3>📅 ${formatDate(dateStr)}</h3>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div class="day-detail">
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
-          <span class="status-badge ${entry.status}">${statusLabels[entry.status] || entry.status}</span>
-          <span style="font-size:0.85rem;">${entry.shift || 'No shift'}</span>
-        </div>
-        <div style="display:flex;gap:16px;margin:12px 0;">
-          <div><span style="color:var(--fg-dim);font-size:0.7rem;">OT Hours</span><br><strong>${entry.ot || 0}h</strong></div>
-          <div><span style="color:var(--fg-dim);font-size:0.7rem;">Late (mins)</span><br><strong>${entry.late || 0}m</strong></div>
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="closeModal();openEditDuty('${dateStr}')">✏️ Edit</button>
-          <button class="btn btn-danger" onclick="deleteDuty('${dateStr}')">🗑️ Delete</button>
-          <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-        </div>
-      </div>
-    `;
-    openModal(html);
-  };
-
-  // ========== OPEN ADD DUTY ==========
-  window.openAddDuty = function() {
-    const date = todayStr();
-    const existing = getEntry(date);
-    if (existing) {
-      showToast('Already has entry for today. Edit it instead.');
-      openEditDuty(date);
-      return;
-    }
-    openDutyForm(date, null);
-  };
-
-  window.openEditDuty = function(dateStr) {
-    const entry = getEntry(dateStr);
-    if (!entry) {
-      showToast('No entry found');
-      return;
-    }
-    openDutyForm(dateStr, entry);
-  };
-
-  function openDutyForm(dateStr, entry) {
-    const statuses = [
-      { id: 'present', label: 'Present', emoji: '✅' },
-      { id: 'halfday', label: 'Half Day', emoji: '🌓' },
-      { id: 'leave', label: 'Leave', emoji: '🏖️' },
-      { id: 'sick', label: 'Sick', emoji: '🤒' },
-      { id: 'holiday', label: 'Holiday', emoji: '🎉' },
-      { id: 'off', label: 'Off', emoji: '📴' }
-    ];
-
-    const shifts = ['Morning', 'Evening', 'Night'];
-
-    const selectedStatus = entry ? entry.status : 'present';
-    const selectedShift = entry ? entry.shift : 'Morning';
-    const ot = entry ? entry.ot : 0;
-    const late = entry ? entry.late : 0;
-
-    let html = `
-      <div class="modal-head">
-        <h3>${entry ? '✏️ Edit' : '➕ Add'} Duty - ${formatDate(dateStr)}</h3>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-
-      <div style="font-size:0.7rem;color:var(--fg-dim);margin-bottom:8px;">STATUS</div>
-      <div class="duty-status-grid">
-    `;
-
-    statuses.forEach(s => {
-      const active = s.id === selectedStatus ? 'active' : '';
-      html += `
-        <button class="duty-btn ${s.id} ${active}" onclick="selectStatus('${s.id}')">
-          <span class="emoji">${s.emoji}</span>
-          ${s.label}
-        </button>
-      `;
-    });
-
-    html += `
-      </div>
-
-      <div style="font-size:0.7rem;color:var(--fg-dim);margin:12px 0 8px;">SHIFT</div>
-      <div class="shift-row">
-    `;
-
-    shifts.forEach(s => {
-      const active = s === selectedShift ? 'active' : '';
-      html += `
-        <button class="shift-btn ${active}" onclick="selectShift('${s}')">${s}</button>
-      `;
-    });
-
-    html += `
-      </div>
-
-      <div class="input-row">
-        <div class="input-group">
-          <label>OT HOURS</label>
-          <input type="number" id="otInput" value="${ot}" min="0" max="24" step="0.5">
-        </div>
-        <div class="input-group">
-          <label>LATE (MINS)</label>
-          <input type="number" id="lateInput" value="${late}" min="0" max="999">
-        </div>
-      </div>
-
-      <button class="btn btn-primary btn-block" onclick="saveDuty('${dateStr}')">💾 SAVE ENTRY</button>
-
-      <div class="btn-group">
-        <button class="btn btn-danger" onclick="deleteDuty('${dateStr}')">🗑️ Delete</button>
-        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-      </div>
-    `;
-
-    openModal(html);
-
-    window._selectedStatus = selectedStatus;
-    window._selectedShift = selectedShift;
-    window._formDate = dateStr;
-  }
-
-  // ========== STATUS/SHIFT SELECT ==========
-  window.selectStatus = function(status) {
-    window._selectedStatus = status;
-    document.querySelectorAll('.duty-btn').forEach(el => {
-      el.classList.remove('active');
-      if (el.classList.contains(status)) el.classList.add('active');
-    });
-  };
-
-  window.selectShift = function(shift) {
-    window._selectedShift = shift;
-    document.querySelectorAll('.shift-btn').forEach(el => {
-      el.classList.remove('active');
-      if (el.textContent.trim() === shift) el.classList.add('active');
-    });
-  };
-
-  // ========== SAVE DUTY ==========
-  window.saveDuty = function(dateStr) {
-    const status = window._selectedStatus || 'present';
-    const shift = window._selectedShift || 'Morning';
-    const ot = parseFloat(document.getElementById('otInput').value) || 0;
-    const late = parseInt(document.getElementById('lateInput').value) || 0;
-
-    if (!status) {
-      showToast('Please select a status');
-      return;
-    }
-
-    saveEntry(dateStr, { status, shift, ot, late });
-    showToast('✅ Duty saved successfully!');
-    closeModal();
-    renderCalendar();
-  };
-
-  // ========== DELETE DUTY ==========
-  window.deleteDuty = function(dateStr) {
-    if (!confirm('Delete this entry?')) return;
-    deleteEntry(dateStr);
-    showToast('🗑️ Entry deleted');
-    closeModal();
-    renderCalendar();
-  };
-
-  // ========== REPORT ==========
-  window.openReport = function() {
-    const entries = getAllEntries();
-    const dates = Object.keys(entries).sort();
-    if (dates.length === 0) {
-      showToast('No entries yet');
-      return;
-    }
-
-    let stats = { present: 0, halfday: 0, leave: 0, sick: 0, holiday: 0, off: 0 };
-    dates.forEach(d => {
-      const entry = entries[d];
-      if (entry && entry.status) {
-        stats[entry.status] = (stats[entry.status] || 0) + 1;
-      }
-    });
-
-    const total = dates.length;
-    const html = `
-      <div class="modal-head">
-        <h3>📊 Report</h3>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div style="padding:4px 0;">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
-          <div style="background:var(--surface-2);padding:8px 14px;border-radius:10px;flex:1;text-align:center;">
-            <div style="font-size:1.2rem;font-weight:700;">${total}</div>
-            <div style="font-size:0.65rem;color:var(--fg-dim);">Total Days</div>
-          </div>
-          <div style="background:color-mix(in srgb, var(--green) 20%, var(--surface));padding:8px 14px;border-radius:10px;flex:1;text-align:center;">
-            <div style="font-size:1.2rem;font-weight:700;color:#7CCBA2;">${stats.present}</div>
-            <div style="font-size:0.65rem;color:var(--fg-dim);">Present</div>
-          </div>
-        </div>
-        ${Object.entries(stats).filter(([k,v]) => k !== 'present').map(([k,v]) => `
-          <div class="list-row" style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
-            <span style="text-transform:capitalize;">${k}</span>
-            <span style="font-weight:600;">${v}</span>
-          </div>
-        `).join('')}
-        <button class="btn btn-primary btn-block mt-16" onclick="closeModal()">Close</button>
-      </div>
-    `;
-    openModal(html);
-  };
-
-  // ========== GRAPH ==========
-  window.openGraph = function() {
-    const entries = getAllEntries();
-    const dates = Object.keys(entries).sort().slice(-14);
-    if (dates.length === 0) {
-      showToast('No entries yet');
-      return;
-    }
-
-    const maxHeight = 80;
-    const statusColors = {
-      present: '#3C7A5C',
-      halfday: '#C9A24B',
-      leave: '#3D6B96',
-      sick: '#7B61B5',
-      holiday: '#B5482D',
-      off: '#6B7785'
-    };
-
-    let bars = dates.map(d => {
-      const entry = entries[d];
-      return {
-        date: d,
-        status: entry ? entry.status : 'none',
-        color: entry ? statusColors[entry.status] || '#6B7785' : '#6B7785'
-      };
-    });
-
-    let html = `
-      <div class="modal-head">
-        <h3>📈 Graph (Last 14 days)</h3>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div style="display:flex;align-items:flex-end;gap:6px;height:120px;padding:8px 0;">
-    `;
-
-    bars.forEach(bar => {
-      const height = bar.status !== 'none' ? maxHeight : 10;
-      const label = bar.date.slice(5);
-      html += `
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
-          <div style="width:100%;max-width:20px;height:${height}px;background:${bar.color};border-radius:4px;transition:height 0.3s;"></div>
-          <div style="font-size:0.5rem;color:var(--fg-dim);">${label}</div>
-        </div>
-      `;
-    });
-
-    html += `
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;">
-        ${Object.entries(statusColors).map(([k, v]) => `
-          <span style="display:inline-flex;align-items:center;gap:4px;font-size:0.6rem;">
-            <span style="width:10px;height:10px;border-radius:3px;background:${v};"></span>
-            ${k}
-          </span>
-        `).join('')}
-      </div>
-      <button class="btn btn-primary btn-block mt-16" onclick="closeModal()">Close</button>
-    `;
-    openModal(html);
-  };
-
-  // ========== SETTINGS ==========
-  window.openSettings = function() {
-    const html = `
-      <div class="modal-head">
-        <h3>⚙️ Settings</h3>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div>
-        <div style="padding:8px 0;border-bottom:1px solid var(--border);">
-          <div style="font-weight:600;">Duty Attendance Pro</div>
-          <div style="font-size:0.75rem;color:var(--fg-dim);">v1.0.0</div>
-        </div>
-        <div style="padding:8px 0;border-bottom:1px solid var(--border);">
-          <div style="font-weight:600;">Developed by</div>
-          <div style="font-size:0.75rem;color:var(--fg-dim);">Samsad Ansari</div>
-        </div>
-        <div style="padding:8px 0;border-bottom:1px solid var(--border);">
-          <div style="font-weight:600;">Total Entries</div>
-          <div style="font-size:0.75rem;color:var(--fg-dim);">${Object.keys(getAllEntries()).length}</div>
-        </div>
-        <div style="padding:8px 0;">
-          <button class="btn btn-danger btn-block" onclick="clearAllData()">🗑️ Clear All Data</button>
-        </div>
-        <button class="btn btn-primary btn-block mt-8" onclick="closeModal()">Close</button>
-      </div>
-    `;
-    openModal(html);
-
-    window.clearAllData = function() {
-      if (!confirm('Delete ALL data?')) return;
-      if (!confirm('Are you sure?')) return;
-      saveData({ entries: {} });
-      showToast('All data cleared');
-      closeModal();
-      renderCalendar();
-    };
-  };
-
-  // ========== BOTTOM NAV ==========
-  const navItems = [
-    { id: 'home', label: 'Home', icon: '🏠' },
-    { id: 'calendar', label: 'Calendar', icon: '📅' },
-    { id: 'add', label: 'Add', icon: '➕' },
-    { id: 'report', label: 'Report', icon: '📊' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' }
-  ];
-
-  function renderNav() {
-    const bottomNav = document.getElementById('bottomNav');
-    bottomNav.innerHTML = '';
-
-    navItems.forEach(item => {
-      const btn = document.createElement('button');
-      btn.className = 'nav-item' + (item.id === 'home' ? ' active' : '');
-      btn.innerHTML = `<span class="ic">${item.icon}</span> ${item.label}`;
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        btn.classList.add('active');
-        if (item.id === 'home') renderCalendar();
-        else if (item.id === 'calendar') renderCalendar();
-        else if (item.id === 'add') openAddDuty();
-        else if (item.id === 'report') openReport();
-        else if (item.id === 'settings') openSettings();
-      });
-      bottomNav.appendChild(btn);
-    });
-  }
-
-  // ========== KEYBOARD SHORTCUTS ==========
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      if (isModalOpen) {
-        closeModal();
-        e.preventDefault();
-      }
-    }
-  });
-
-  // ========== INIT ==========
-  renderNav();
-  renderCalendar();
-
-  console.log('✅ Duty Attendance Pro loaded');
-  console.log('👨‍💻 Developed by Samsad Ansari');
-  console.log('📱 Android Back Button supported');
-  console.log('🔄 Service Worker ready');
-
-})();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
