@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>(function(s){s.dataset.zone='11235583',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <meta name="monetag" content="431cc4144f1bd99bd068adfe8aee6fe4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Duty Attendance Pro</title>
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface2: #334155;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --green: #10b981;
+            --green-bg: rgba(16, 185, 129, 0.2);
+            --red: #ef4444;
+            --red-bg: rgba(239, 68, 68, 0.2);
+            --blue: #3b82f6;
+            --blue-bg: rgba(59, 130, 246, 0.2);
+            --purple: #8b5cf6;
+            --purple-bg: rgba(139, 92, 246, 0.2);
+            --border: rgba(148, 163, 184, 0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface2: #f1f5f9;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            transition: background var(--transition), color var(--transition);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Screens */
+        .screen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            padding-top: max(16px, env(safe-area-inset-top));
+            padding-bottom: max(16px, env(safe-area-inset-bottom));
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 10;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Splash */
+        #splashScreen {
+            background: #0f172a;
+            z-index: 100;
+            gap: 14px;
+        }
+
+        .splash-logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 4px solid #f59e0b;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .splash-logo::before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 22px;
+            background: #f59e0b;
+            top: 10px;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(45deg);
+            border-radius: 2px;
+            animation: rotateHand 2s linear infinite;
+        }
+
+        .splash-logo::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #f59e0b;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 0 16px rgba(245, 158, 11, 0); }
+        }
+        @keyframes rotateHand {
+            from { transform: translateX(-50%) rotate(45deg); }
+            to { transform: translateX(-50%) rotate(405deg); }
+        }
+
+        .splash-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+            text-align: center;
+        }
+
+        .splash-subtitle {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            text-align: center;
+        }
+
+        .splash-dev {
+            position: absolute;
+            bottom: 36px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.72rem;
+            line-height: 1.5;
+        }
+
+        .splash-dev strong {
+            color: #fbbf24;
+        }
+
+        /* Onboarding */
+        #onboardingScreen {
+            background: var(--bg);
+            z-index: 90;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .onboard-slides {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            max-width: 360px;
+            width: 100%;
+        }
+
+        .onboard-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .onboard-icon {
+            font-size: 52px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .onboard-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .onboard-desc {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            line-height: 1.5;
+            padding: 0 8px;
+        }
+
+        .onboard-dots {
+            display: flex;
+            gap: 6px;
+            margin: 8px 0;
+        }
+
+        .onboard-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--surface2);
+            transition: all var(--transition);
+        }
+
+        .onboard-dot.active {
+            background: var(--gold);
+            width: 22px;
+            border-radius: 4px;
+        }
+
+        .onboard-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: #000;
+            width: 100%;
+            padding: 13px;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+            width: 100%;
+        }
+
+        .btn-danger {
+            background: var(--red);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-sm {
+            padding: 7px 14px;
+            font-size: 0.74rem;
+            width: auto;
+        }
+
+        /* Login */
+        #loginScreen {
+            background: var(--bg);
+            z-index: 80;
+            justify-content: flex-start;
+            padding-top: 36px;
+            gap: 18px;
+        }
+
+        .login-wrap {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .login-header {
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .login-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .login-subtitle {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .phone-wrap {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .country-code {
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 11px 10px;
+            color: var(--text);
+            font-size: 0.88rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 11px 12px;
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 0.88rem;
+            outline: none;
+            transition: all var(--transition);
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .alert {
+            padding: 9px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.76rem;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: var(--red-bg);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .alert-info {
+            background: var(--blue-bg);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        /* App */
+        #appScreen {
+            background: var(--bg);
+            z-index: 70;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            padding-top: max(10px, env(safe-area-inset-top));
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            gap: 8px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .topbar-logo {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .topbar-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text);
+            transition: all var(--transition);
+            flex-shrink: 0;
+        }
+
+        .icon-btn:active {
+            background: var(--surface2);
+        }
+
+        .phone-tag {
+            font-size: 0.64rem;
+            color: var(--gold);
+            font-weight: 600;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 3px 7px;
+            border-radius: 50px;
+            white-space: nowrap;
+            display: none;
+        }
+
+        @media (min-width: 360px) {
+            .phone-tag {
+                display: inline-block;
+            }
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            padding-bottom: 75px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            display: flex;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 3px 4px;
+            padding-bottom: max(3px, env(safe-area-inset-bottom));
+            gap: 2px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+            padding: 5px 2px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.56rem;
+            font-weight: 500;
+            transition: all var(--transition);
+            min-height: 42px;
+            touch-action: manipulation;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .nav-item.active {
+            color: var(--gold);
+            background: rgba(245, 158, 11, 0.1);
+            font-weight: 600;
+        }
+
+        /* Calendar */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .cal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .cal-month {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .cal-nav {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 0.7rem;
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .cal-dow {
+            text-align: center;
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            padding: 2px 0;
+            text-transform: uppercase;
+        }
+
+        .cal-cell {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 2px solid transparent;
+            transition: all var(--transition);
+        }
+
+        .cal-cell:active {
+            transform: scale(0.85);
+        }
+
+        .cal-cell.today {
+            border-color: var(--gold);
+        }
+        .cal-cell.selected {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+        }
+        .cal-cell.empty {
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .cal-dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            margin-top: 1px;
+        }
+
+        /* OT hours badge shown directly on the calendar date */
+        .cal-ot {
+            font-size: 0.42rem;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        /* Today's duty recorded confirmation */
+        .today-done {
+            background: var(--green-bg);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .cal-cell.s-present {
+            background: var(--green-bg);
+        }
+        .cal-cell.s-present .cal-dot {
+            background: #10b981;
+        }
+        .cal-cell.s-halfday {
+            background: rgba(245, 158, 11, 0.2);
+        }
+        .cal-cell.s-halfday .cal-dot {
+            background: #f59e0b;
+        }
+        .cal-cell.s-leave {
+            background: var(--blue-bg);
+        }
+        .cal-cell.s-leave .cal-dot {
+            background: #3b82f6;
+        }
+        .cal-cell.s-sick {
+            background: var(--purple-bg);
+        }
+        .cal-cell.s-sick .cal-dot {
+            background: #8b5cf6;
+        }
+        .cal-cell.s-holiday {
+            background: var(--red-bg);
+        }
+        .cal-cell.s-holiday .cal-dot {
+            background: #ef4444;
+        }
+        .cal-cell.s-off {
+            background: rgba(100, 116, 139, 0.2);
+        }
+        .cal-cell.s-off .cal-dot {
+            background: #64748b;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+            font-size: 0.56rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .legend-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .stat-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .stat-lbl {
+            font-size: 0.58rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 8px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .pill-g {
+            background: var(--green-bg);
+            color: #6ee7b7;
+        }
+        .pill-r {
+            background: var(--red-bg);
+            color: #fca5a5;
+        }
+        .pill-b {
+            background: var(--blue-bg);
+            color: #93c5fd;
+        }
+        .pill-p {
+            background: var(--purple-bg);
+            color: #c4b5fd;
+        }
+        .pill-o {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+        .pill-gr {
+            background: var(--surface2);
+            color: var(--text-muted);
+        }
+
+        .streak-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: var(--radius);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .streak-num {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .streak-title {
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .streak-sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 24px 12px;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 2.2rem;
+            margin-bottom: 6px;
+        }
+
+        .empty-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+            font-size: 0.85rem;
+        }
+
+        .empty-sub {
+            font-size: 0.72rem;
+        }
+
+        /* Duty Buttons */
+        .duty-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin: 6px 0;
+        }
+
+        .duty-btn {
+            padding: 8px 3px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .duty-btn:active {
+            transform: scale(0.92);
+        }
+
+        .duty-btn .d-icon {
+            font-size: 1rem;
+        }
+
+        .duty-btn.sel-present {
+            border-color: #10b981;
+            background: var(--green-bg);
+            color: #6ee7b7;
+        }
+        .duty-btn.sel-halfday {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+        .duty-btn.sel-leave {
+            border-color: #3b82f6;
+            background: var(--blue-bg);
+            color: #93c5fd;
+        }
+        .duty-btn.sel-sick {
+            border-color: #8b5cf6;
+            background: var(--purple-bg);
+            color: #c4b5fd;
+        }
+        .duty-btn.sel-holiday {
+            border-color: #ef4444;
+            background: var(--red-bg);
+            color: #fca5a5;
+        }
+        .duty-btn.sel-off {
+            border-color: #64748b;
+            background: rgba(100, 116, 139, 0.2);
+            color: #94a3b8;
+        }
+
+        .shift-row {
+            display: flex;
+            gap: 4px;
+            margin: 6px 0;
+            flex-wrap: wrap;
+        }
+
+        .shift-btn {
+            flex: 1;
+            min-width: 55px;
+            padding: 7px 4px;
+            border-radius: 7px;
+            border: 2px solid var(--border);
+            background: var(--surface2);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.68rem;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+
+        .shift-btn.sel {
+            border-color: var(--gold);
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--gold-light);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px 16px 0 0;
+            width: 100%;
+            max-width: 460px;
+            max-height: 82vh;
+            overflow-y: auto;
+            padding: 16px;
+            transform: translateY(30px);
+            transition: transform var(--transition);
+        }
+
+        .modal-overlay.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-handle {
+            width: 28px;
+            height: 3px;
+            background: var(--surface2);
+            border-radius: 2px;
+            margin: 0 auto 10px;
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .modal-head h3 {
+            font-size: 0.9rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            box-shadow: var(--shadow);
+            animation: slideDown 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spinner {
+            width: 15px;
+            height: 15px;
+            border: 2.5px solid rgba(0, 0, 0, 0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-12 {
+            margin-top: 12px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .flex {
+            display: flex;
+        }
+        .items-center {
+            align-items: center;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .gap-6 {
+            gap: 6px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        /* Desktop */
+        @media (min-width: 600px) {
+            .main-content {
+                padding: 18px;
+                padding-bottom: 24px;
+            }
+            .bottom-nav {
+                position: sticky;
+                border-radius: var(--radius);
+                margin: 0 10px 8px;
+            }
+            .nav-item {
+                font-size: 0.62rem;
+                padding: 7px 4px;
+            }
+            .nav-item .nav-icon {
+                font-size: 1.1rem;
+            }
+            .modal {
+                border-radius: 16px;
+            }
+            .modal-overlay {
+                align-items: center;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .main-content {
+                max-width: 780px;
+                padding: 24px;
+                padding-bottom: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH -->
+    <div class="screen" id="splashScreen">
+        <div class="splash-logo"></div>
+        <div class="splash-title">Duty Attendance Pro</div>
+        <div class="splash-subtitle">Track your duty, anytime, anywhere</div>
+        <div class="splash-dev">
+            Developed by <strong>Samsad Ansari</strong><br>v1.0.0
+        </div>
+    </div>
+
+    <!-- ONBOARDING -->
+    <div class="screen hidden" id="onboardingScreen">
+        <div class="onboard-slides" id="onboardSlides">
+            <div class="onboard-slide" data-slide="0">
+                <div class="onboard-icon">📅</div>
+                <div class="onboard-title">Track Your Duty</div>
+                <div class="onboard-desc">Mark daily attendance with a tap. Present, leave, sick — all covered.</div>
+            </div>
+            <div class="onboard-slide hidden" data-slide="1">
+                <div class="onboard-icon">📊</div>
+                <div class="onboard-title">Monthly Reports</div>
+                <div class="onboard-desc">Get detailed monthly reports with overtime tracking.</div>
+            </div>
+            <div class="onboard-slide hidden" data-slide="2">
+                <div class="onboard-icon">📱</div>
+                <div class="onboard-title">Login with Mobile</div>
+                <div class="onboard-desc">Just your mobile number. No password. No OTP. Simple!</div>
+            </div>
+        </div>
+        <div class="onboard-dots" id="onboardDots">
+            <div class="onboard-dot active" data-dot="0"></div>
+            <div class="onboard-dot" data-dot="1"></div>
+            <div class="onboard-dot" data-dot="2"></div>
+        </div>
+        <div class="onboard-buttons">
+            <button class="btn btn-outline" id="skipOnboard">Skip</button>
+            <button class="btn btn-primary" id="nextOnboard">Next →</button>
+        </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="screen hidden" id="loginScreen">
+        <div class="login-wrap">
+            <div class="login-header">
+                <div class="login-logo">🕐</div>
+                <div class="login-title">Duty Attendance Pro</div>
+                <div class="login-subtitle">Enter your mobile number to continue</div>
+            </div>
+            <div class="card">
+                <div class="alert alert-error" id="loginError"></div>
+                <div class="alert alert-info" id="loginInfo"></div>
+                <div class="form-group">
+                    <label class="form-label">Mobile Number</label>
+                    <div class="phone-wrap">
+                        <div class="country-code">+91</div>
+                        <input type="tel" class="form-input" id="mobileNumber"
+                        placeholder="10-digit number" maxlength="10"
+                        inputmode="numeric" pattern="[0-9]*" autocomplete="tel">
+                    </div>
+                    <div style="font-size:0.6rem;color:var(--text-muted);margin-top:3px">
+                        No OTP. Data linked to this number.
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="loginBtn">
+                    <span class="spinner" id="loginSpinner"></span>
+                    <span id="loginBtnText">Continue</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div class="screen hidden" id="appScreen">
+        <header class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-logo">🕐</span>
+                <span class="topbar-title" id="pageTitle">Dashboard</span>
+            </div>
+            <div class="topbar-right">
+                <span class="phone-tag" id="phoneTag">📱</span>
+                <button class="icon-btn" id="themeBtn" title="Theme">🌙</button>
+                <button class="icon-btn" id="logoutBtn" title="Logout">🚪</button>
+            </div>
+        </header>
+        <div class="main-content" id="mainContent"></div>
+        <nav class="bottom-nav" id="bottomNav"></nav>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <div id="modalInner"></div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase
+        const fc = {
+            apiKey: "AIzaSyB1dENet9t7uI2M1AFnWTFUIcEmvv576Tk",
+            authDomain: "duty-attendance-pro.firebaseapp.com",
+            databaseURL: "https://duty-attendance-pro-default-rtdb.firebaseio.com",
+            projectId: "duty-attendance-pro",
+            storageBucket: "duty-attendance-pro.firebasestorage.app",
+            messagingSenderId: "648147848948",
+            appId: "1:648147848948:web:97da30c56525b38e21d8a1"
+        };
+        firebase.initializeApp(fc);
+        const db = firebase.database();
+
+        // State
+        let mobile = null;
+        let view = 'calendar';
+        let dark = true;
+        let entries = {};
+        let selDate = today();
+        let calY = new Date().getFullYear();
+        let calM = new Date().getMonth() + 1;
+        let obSlide = 0;
+        const totalSlides = 3;
+        const NAV = [
+            { id: 'calendar', icon: '📅', lbl: 'Calendar' },
+            { id: 'today', icon: '⏱️', lbl: 'Today' },
+            { id: 'report', icon: '📊', lbl: 'Report' },
+            { id: 'graph', icon: '📈', lbl: 'Graph' }
+        ];
+
+        // Helpers
+        function today() { const d = new Date(); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+
+        function p(n) { return String(n).padStart(2, '0'); }
+
+        function ds(y, m, d) { return `${y}-${p(m)}-${p(d)}`; }
+
+        function dim(y, m) { return new Date(y, m, 0).getDate(); }
+
+        function fdow(y, m) { return new Date(y, m - 1, 1).getDay(); }
+
+        function fmt(s) {
+            if (!s) return '';
+            const [y, m, d] = s.split('-').map(Number);
+            return new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'short', month: 'short',
+            day: 'numeric', year: 'numeric' });
+        }
+
+        function toast(msg, icon = '✅') {
+            const c = document.getElementById('toastContainer');
+            const e = document.createElement('div');
+            e.className = 'toast';
+            e.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+            c.appendChild(e);
+            setTimeout(() => { e.style.opacity = '0';
+                e.style.transform = 'translateY(-6px)';
+                e.style.transition = 'all .25s'; }, 2000);
+            setTimeout(() => e.remove(), 2400);
+        }
+
+        function showScr(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        // Theme
+        function theme() {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+            const b = document.getElementById('themeBtn');
+            if (b) b.textContent = dark ? '🌙' : '☀️';
+            if (mobile && db) db.ref(`users/${mobile}/s/theme`).set(dark ? 'dark' : 'light').catch(() => {});
+        }
+
+        document.getElementById('themeBtn').addEventListener('click', () => {
+            dark = !dark;
+            theme();
+            toast(dark ? 'Dark mode' : 'Light mode', '🎨');
+        });
+
+        // Splash → Onboarding → Login
+        function goLogin() {
+            showScr('loginScreen');
+            const sm = localStorage.getItem('dapm');
+            if (sm) {
+                document.getElementById('mobileNumber').value = sm.slice(-10);
+                document.getElementById('loginInfo').textContent = 'Welcome back!';
+                document.getElementById('loginInfo').classList.add('show');
+            }
+            document.getElementById('mobileNumber').focus();
+        }
+
+        // Splash → auto-login → Onboarding/Login
+        // FIX: try silent auto-login first so a signed-in user is NOT asked to log in again.
+        setTimeout(async () => {
+            const li = await al();                 // attempt persistent auto-login while splash is showing
+            document.getElementById('splashScreen').classList.add('hidden');
+            if (li) return;                        // already signed in -> app screen already shown
+            if (localStorage.getItem('dapon') === '1') goLogin();
+            else showScr('onboardingScreen');
+        }, 2400);
+
+        // Onboarding
+        function updOb() {
+            document.querySelectorAll('.onboard-slide').forEach((s, i) => s.classList.toggle('hidden', i !== obSlide));
+            document.querySelectorAll('.onboard-dot').forEach((d, i) => d.classList.toggle('active', i === obSlide));
+            document.getElementById('nextOnboard').textContent = obSlide === totalSlides - 1 ? 'Get Started 🚀' :
+                'Next →';
+        }
+
+        document.getElementById('nextOnboard').addEventListener('click', () => {
+            if (obSlide < totalSlides - 1) { obSlide++;
+                updOb(); } else { localStorage.setItem('dapon', '1');
+                goLogin(); }
+        });
+        document.getElementById('skipOnboard').addEventListener('click', () => { localStorage.setItem('dapon', '1');
+            goLogin(); });
+        document.querySelectorAll('.onboard-dot').forEach(d => d.addEventListener('click', () => { obSlide = parseInt(d
+                .dataset.dot);
+            updOb(); }));
+
+        let tsx = 0;
+        document.getElementById('onboardingScreen').addEventListener('touchstart', e => tsx = e.touches[0].clientX);
+        document.getElementById('onboardingScreen').addEventListener('touchend', e => {
+            const d = tsx - e.changedTouches[0].clientX;
+            if (Math.abs(d) > 35) {
+                if (d > 0 && obSlide < totalSlides - 1) obSlide++;
+                else if (d < 0 && obSlide > 0) obSlide--;
+                updOb();
+            }
+        });
+
+        // Login
+        document.getElementById('mobileNumber').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('loginInfo').classList.remove('show');
+        });
+
+        function fmob(r) { const c = r.replace(/\D/g, ''); return c.length === 10 ? '91' + c : c.startsWith('91') && c
+                .length === 12 ? c : c; }
+
+        function vmob(r) { const c = r.replace(/\D/g, ''); return (c.length === 10 && /^[6-9]/.test(c)) || (c.length ===
+                12 && /^91[6-9]/.test(c)); }
+
+        function dmob(m) { if (!m || m.length < 10) return '+91XXXXXXXXXX'; const l = m.slice(-10); return `+91 ${l.slice(0,
+                5)} ${l.slice(5)}`; }
+
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const r = document.getElementById('mobileNumber').value.trim();
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('loginInfo').classList.remove('show');
+            if (!r) return document.getElementById('loginError').textContent =
+                'Enter mobile number.', document.getElementById('loginError').classList.add('show');
+            if (!vmob(r)) return document.getElementById('loginError').textContent =
+                'Enter valid 10-digit number starting with 6-9.', document.getElementById('loginError').classList
+                .add('show');
+            const fm = fmob(r);
+            document.getElementById('loginSpinner').style.display = 'inline-block';
+            document.getElementById('loginBtn').disabled = true;
+            document.getElementById('loginBtnText').textContent = 'Please wait...';
+            try {
+                const us = await db.ref(`users/${fm}/p`).once('value');
+                if (!us.exists()) await db.ref(`users/${fm}/p`).set({ m: fm, t: Date.now(), d: dmob(fm) });
+                try { const ts = await db.ref(`users/${fm}/s/theme`).once('value'); if (ts.val()) dark = ts.val() ===
+                        'dark'; } catch (e) {}
+                localStorage.setItem('dapm', fm);
+                mobile = fm;
+                theme();
+                try { const es = await db.ref(`users/${fm}/e`).once('value');
+                    entries = es.val() || {};
+                    db.ref(`users/${fm}/e`).on('value', s => { entries = s.val() || {}; if (view === 'calendar')
+                            renView(); }); } catch (e) { entries = {}; }
+                document.getElementById('phoneTag').textContent = '📱 ' + dmob(fm);
+                showScr('appScreen');
+                bNav();
+                renView();
+                toast('Signed in!', '✅');
+            } catch (e) { document.getElementById('loginError').textContent = 'Network error.',
+                    document.getElementById('loginError').classList.add('show'); } finally {
+                document.getElementById('loginSpinner').style.display = 'none';
+                document.getElementById('loginBtn').disabled = false;
+                document.getElementById('loginBtnText').textContent = 'Continue';
+            }
+        });
+
+        document.getElementById('mobileNumber').addEventListener('keydown', e => { if (e.key === 'Enter') document
+                .getElementById('loginBtn').click(); });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('Logout? Data is saved.')) {
+                if (mobile && db) db.ref(`users/${mobile}/e`).off();
+                localStorage.removeItem('dapm');   // FIX: clear saved login so auto-login does not sign back in
+                mobile = null;
+                entries = {};
+                showScr('loginScreen');
+                document.getElementById('mobileNumber').value = '';
+                document.getElementById('mobileNumber').focus();
+                toast('Logged out', '👋');
+            }
+        });
+
+        // Auto login
+        // FIX: once a number has logged in, keep the session persistent (even if the network read fails),
+        // so the user is not repeatedly sent back to the login screen.
+        async function al() {
+            const sm = localStorage.getItem('dapm');
+            if (!sm) return false;
+            mobile = sm;
+            try { const ts = await db.ref(`users/${sm}/s/theme`).once('value'); if (ts.val()) dark = ts.val() ===
+                    'dark'; } catch (e) {}
+            theme();
+            try {
+                const es = await db.ref(`users/${sm}/e`).once('value');
+                entries = es.val() || {};
+            } catch (e) { entries = {}; }
+            try {
+                db.ref(`users/${sm}/e`).on('value', s => { entries = s.val() || {}; if (view === 'calendar')
+                        renView(); });
+            } catch (e) {}
+            document.getElementById('phoneTag').textContent = '📱 ' + dmob(sm);
+            showScr('appScreen');
+            bNav();
+            renView();
+            return true;
+        }
+
+        // Navigation
+        function bNav() {
+            const n = document.getElementById('bottomNav');
+            n.innerHTML = '';
+            NAV.forEach(item => {
+                const b = document.createElement('button');
+                b.className = 'nav-item' + (view === item.id ? ' active' : '');
+                b.innerHTML = `<span class="nav-icon">${item.icon}</span><span>${item.lbl}</span>`;
+                b.addEventListener('click', () => navTo(item.id));
+                n.appendChild(b);
+            });
+        }
+
+        function navTo(v) { view = v;
+            document.getElementById('pageTitle').textContent = NAV.find(n => n.id === v)?.lbl || v;
+            bNav();
+            renView();
+            document.getElementById('mainContent').scrollTop = 0; }
+
+        function renView() {
+            const e = document.getElementById('mainContent');
+            e.innerHTML = '';
+            if (view === 'calendar') renCal(e);
+            else if (view === 'today') renToday(e);
+            else if (view === 'report') renRep(e);
+            else if (view === 'graph') renGraph(e);
+        }
+
+        // Calendar
+        function renCal(el) {
+            const td = today();
+            const days = dim(calY, calM);
+            const first = fdow(calY, calM);
+            const ml = new Date(calY, calM - 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
+            let pr = 0,
+                ab = 0,
+                lv = 0,
+                ot = 0;
+            for (let d = 1; d <= days; d++) {
+                const k = ds(calY, calM, d);
+                const e = entries[k];
+                const ip = new Date(calY, calM - 1, d) <= new Date();
+                if (e) { if (e.s === 'present' || e.s === 'halfday') pr += (e.s === 'halfday' ? 0.5 : 1); else if (['leave',
+                        'sick', 'holiday'
+                    ].includes(e.s)) lv++; if (e.o) ot += Number(e.o) || 0; } else if (ip && k !== td) ab++;
+            }
+            let st = 0;
+            for (let i = 0; i < 365; i++) { const d = new Date();
+                d.setDate(d.getDate() - i); const k = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; if (
+                    entries[k] && entries[k].s === 'present') st++; else if (i === 0) continue; else break; }
+            el.innerHTML = `
+            <div class="card">
+                <div class="cal-header">
+                    <button class="cal-nav" id="cp">◀</button>
+                    <span class="cal-month">${ml}</span>
+                    <button class="cal-nav" id="cn">▶</button>
+                </div>
+                <div class="cal-grid" id="cg"></div>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span>Present</span>
+                    <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span>Half</span>
+                    <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span>Leave</span>
+                    <span class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span>Sick</span>
+                    <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Holiday</span>
+                    <span class="legend-item"><span class="legend-dot" style="background:#64748b"></span>Off</span>
+                </div>
+            </div>
+            ${st>0?`<div class="streak-box"><div class="streak-num">${st}</div><div><div class="streak-title">Day Streak! 🏆</div><div class="streak-sub">Keep going!</div></div></div>`:''}
+            <div class="grid-3 mt-12">
+                <div class="stat-box"><div class="stat-val">${pr}</div><div class="stat-lbl">Present</div></div>
+                <div class="stat-box"><div class="stat-val">${ab}</div><div class="stat-lbl">Absent</div></div>
+                <div class="stat-box"><div class="stat-val">${ot}h</div><div class="stat-lbl">OT</div></div>
+            </div>
+            <div id="dd" class="mt-12"></div>`;
+            const g = document.getElementById('cg');
+            ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(d => { const c = document.createElement('div');
+                c.className = 'cal-dow';
+                c.textContent = d;
+                g.appendChild(c); });
+            for (let i = 0; i < first; i++) { const c = document.createElement('div');
+                c.className = 'cal-cell empty';
+                g.appendChild(c); }
+            for (let d = 1; d <= days; d++) { const k = ds(calY, calM, d); const e = entries[k]; let cl = 'cal-cell'; if (
+                    k === td) cl += ' today'; if (k === selDate) cl += ' selected'; if (e) cl += ` s-${e.s}`; const c =
+                    document.createElement('div');
+                c.className = cl;
+                c.dataset.date = k;
+                // FIX: show a dot when duty is recorded, and show OT hours (e.g. "2h") right on the calendar date
+                c.innerHTML = `<span>${d}</span>${e?'<span class="cal-dot"></span>':''}${e&&Number(e.o)>0?`<span class="cal-ot">${e.o}h</span>`:''}`;
+                c.addEventListener('click', () => { selDate = k;
+                    renCal(el);
+                    sdd(k); });
+                g.appendChild(c); }
+            document.getElementById('cp').addEventListener('click', () => { calM--; if (calM < 1) { calM = 12;
+                    calY--; }
+                renCal(el); });
+            document.getElementById('cn').addEventListener('click', () => { calM++; if (calM > 12) { calM = 1;
+                    calY++; }
+                renCal(el); });
+            if (selDate) sdd(selDate);
+        }
+
+        function sdd(dk) {
+            const el = document.getElementById('dd');
+            if (!el) return;
+            const e = entries[dk];
+            const it = dk === today();
+            const lb = { present: '✅ Present', halfday: '🌓 Half', leave: '🏖️ Leave', sick: '🤒 Sick', holiday: '🎉 Holiday',
+                off: '📴 Off' };
+            const cl = { present: 'g', halfday: 'o', leave: 'b', sick: 'p', holiday: 'r', off: 'gr' };
+            el.innerHTML = `
+            <div class="card">
+                <div class="flex justify-between items-center" style="margin-bottom:8px">
+                    <strong style="font-size:0.82rem">${fmt(dk)}${it?' (Today)':''}</strong>
+                    <button class="btn btn-primary btn-sm" onclick="om('${dk}')">${e?'✏️ Edit':'➕ Add'}</button>
+                </div>
+                ${e?`
+                ${it?`<div class="today-done">✅ Today's duty recorded${Number(e.o)>0?` • ${e.o}h OT`:''}</div>`:''}
+                <div class="flex gap-6 items-center flex-wrap" style="margin-bottom:6px">
+                    <span class="pill pill-${cl[e.s]||'gr'}">${lb[e.s]||e.s}</span>
+                    ${e.sh?`<span class="pill pill-gr">⏰ ${e.sh}</span>`:''}
+                </div>
+                <div class="grid-2" style="gap:5px">
+                    <div class="stat-box"><div class="stat-val" style="font-size:1rem">${e.o||0}h</div><div class="stat-lbl">OT</div></div>
+                    <div class="stat-box"><div class="stat-val" style="font-size:1rem">${e.l||0}m</div><div class="stat-lbl">Late</div></div>
+                </div>
+                ${e.n?`<p style="margin-top:6px;font-size:0.72rem;color:var(--text-muted)">📝 ${e.n}</p>`:''}
+                <button class="btn btn-danger btn-sm mt-12" onclick="de('${dk}')">🗑️ Delete</button>
+                `:`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No entry</div><div class="empty-sub">Tap Add to record</div></div>`}
+            </div>`;
+        }
+
+        // Modal
+        let ms = 'present',
+            msh = 'Morning',
+            md = '';
+        window.om = function(dk) {
+            md = dk;
+            const e = entries[dk] || {};
+            ms = e.s || 'present';
+            msh = e.sh || 'Morning';
+            const sts = [{ k: 'present', i: '✅', l: 'Present' }, { k: 'halfday', i: '🌓', l: 'Half Day' }, { k: 'leave',
+                i: '🏖️', l: 'Leave' }, { k: 'sick', i: '🤒', l: 'Sick' }, { k: 'holiday', i: '🎉', l: 'Holiday' },
+            { k: 'off', i: '📴', l: 'Off' }];
+            const shs = ['Morning', 'Evening', 'Night', 'General'];
+            document.getElementById('modalInner').innerHTML = `
+            <div class="modal-head">
+                <h3>${e.s?'✏️ Edit':'➕ Add'} — ${fmt(dk)}</h3>
+                <button class="modal-close" onclick="cm()">✕</button>
+            </div>
+            <label class="form-label">Status</label>
+            <div class="duty-grid" id="dg">
+                ${sts.map(s=>`<button class="duty-btn ${ms===s.k?'sel-'+s.k:''}" onclick="sms('${s.k}')"><span class="d-icon">${s.i}</span>${s.l}</button>`).join('')}
+            </div>
+            <label class="form-label mt-12">Shift</label>
+            <div class="shift-row" id="sr">
+                ${shs.map(s=>`<button class="shift-btn ${msh===s?'sel':''}" onclick="smsh('${s}')">${s}</button>`).join('')}
+            </div>
+            <div class="grid-2 mt-12" style="gap:5px">
+                <div class="form-group"><label class="form-label">OT Hours</label><input type="number" class="form-input" id="oi" value="${e.o||0}" min="0" max="24" step="0.5"></div>
+                <div class="form-group"><label class="form-label">Late (mins)</label><input type="number" class="form-input" id="li" value="${e.l||0}" min="0" max="999"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Note</label><textarea class="form-input" id="ni" rows="2" placeholder="Optional...">${e.n||''}</textarea></div>
+            <button class="btn btn-primary w-full mt-12" onclick="sv()">💾 Save</button>
+            ${e.s?`<button class="btn btn-danger w-full mt-8" onclick="de('${dk}')">🗑️ Delete</button>`:''}
+            <button class="btn btn-outline w-full mt-8" onclick="cm()">Cancel</button>`;
+            document.getElementById('modalOverlay').classList.add('show');
+        };
+        window.sms = function(s) {
+            ms = s;
+            document.querySelectorAll('#dg .duty-btn').forEach(b => { b.className = 'duty-btn'; const m = b.getAttribute(
+                    'onclick').match(/'([^']+)'/); if (m && m[1] === s) b.classList.add('sel-' + s); });
+        };
+        window.smsh = function(s) { msh = s;
+            document.querySelectorAll('#sr .shift-btn').forEach(b => b.classList.toggle('sel', b.textContent.trim() ===
+                s)); };
+        window.sv = async function() {
+            const en = { s: ms, sh: msh, o: parseFloat(document.getElementById('oi').value) || 0, l: parseInt(document
+                    .getElementById('li').value) || 0, n: document.getElementById('ni').value.trim(), u: Date.now() };
+            if (db && mobile) { try { await db.ref(`users/${mobile}/e/${md}`).set(en);
+                    toast('Saved!', '✅'); } catch (e) { entries[md] = en;
+                    toast('Saved locally', '📱'); } } else { entries[md] = en;
+                toast('Saved!', '✅'); }
+            cm();
+            renView(); };
+        window.de = async function(dk) { if (!confirm(`Delete ${fmt(dk)}?`)) return; if (db && mobile) { try { await db
+                    .ref(`users/${mobile}/e/${dk}`).remove();
+                    toast('Deleted', '🗑️'); } catch (e) { delete entries[dk];
+                    toast('Deleted locally', '🗑️'); } } else { delete entries[dk];
+                toast('Deleted', '🗑️'); }
+            cm();
+            renView(); };
+        window.cm = () => document.getElementById('modalOverlay').classList.remove('show');
+        document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) cm(); });
+
+        // Today
+        function renToday(el) {
+            const td = today();
+            const e = entries[td] || {};
+            const ic = { present: '✅', halfday: '🌓', leave: '🏖️', sick: '🤒', holiday: '🎉', off: '📴' };
+            el.innerHTML = `
+            <h2 class="section-title">Today — ${fmt(td)}</h2>
+            <div class="card text-center" style="padding:22px">
+                <div style="font-size:2.8rem">${e.s?ic[e.s]||'📋':'🕐'}</div>
+                <div style="font-size:1.1rem;font-weight:700;margin:4px 0">${e.s?e.s.charAt(0).toUpperCase()+e.s.slice(1):'Not Recorded'}</div>
+                ${e.sh?`<span class="pill pill-gr">${e.sh} Shift</span>`:''}
+            </div>
+            ${e.s?`<div class="grid-2 mt-12"><div class="stat-box"><div class="stat-val">${e.o||0}h</div><div class="stat-lbl">OT</div></div><div class="stat-box"><div class="stat-val">${e.l||0}m</div><div class="stat-lbl">Late</div></div></div>${e.n?`<div class="card mt-12"><p style="font-size:0.78rem">📝 ${e.n}</p></div>`:''}`:''}
+            <button class="btn btn-primary w-full mt-16" style="padding:14px" onclick="om('${td}')">${e.s?'✏️ Edit Today':'➕ Add Today'}</button>`;
+        }
+
+        // Report
+        // FIX: report now follows the month you pick with the ◀ / ▶ buttons (shared with the calendar month),
+        // so you can select any month/date's report by navigating the calendar.
+        function renRep(el) {
+            const y = calY, m = calM;
+            const td = today();
+            const days = dim(y, m);
+            let st = { present: 0, halfday: 0, leave: 0, sick: 0, holiday: 0, off: 0, absent: 0 };
+            let tot = 0;
+            for (let d = 1; d <= days; d++) { const k = ds(y, m, d); const e = entries[k]; const ip = new Date(y, m - 1, d) <=
+                    new Date(); if (e) { st[e.s] = (st[e.s] || 0) + 1;
+                    tot += Number(e.o) || 0; } else if (ip && k !== td) st.absent++; }
+            const w = st.present + st.halfday * 0.5;
+            const all = Object.values(st).reduce((a, b) => a + b, 0);
+            const rate = all > 0 ? Math.round(w / all * 100) : 0;
+            const rw = [{ k: 'present', i: '✅', l: 'Present', c: '#10b981' }, { k: 'halfday', i: '🌓', l: 'Half Day',
+                    c: '#f59e0b' }, { k: 'leave', i: '🏖️', l: 'Leave', c: '#3b82f6' }, { k: 'sick', i: '🤒',
+                l: 'Sick', c: '#8b5cf6' }, { k: 'holiday', i: '🎉', l: 'Holiday', c: '#ef4444' }, { k: 'off',
+                    i: '📴', l: 'Off', c: '#64748b' }, { k: 'absent', i: '❌', l: 'Absent', c: '#f87171' }];
+            el.innerHTML = `
+            <h2 class="section-title">Monthly Report</h2>
+            <div class="card" style="margin-bottom:10px">
+                <div class="cal-header" style="margin-bottom:0">
+                    <button class="cal-nav" id="rp">◀</button>
+                    <span class="cal-month">${new Date(y,m-1).toLocaleString('en-US',{month:'long',year:'numeric'})}</span>
+                    <button class="cal-nav" id="rn">▶</button>
+                </div>
+            </div>
+            <div class="card text-center" style="margin-bottom:10px">
+                <div style="font-size:2.6rem;font-weight:700;color:var(--gold)">${rate}%</div>
+                <div style="color:var(--text-muted);font-size:0.72rem">${new Date(y,m-1).toLocaleString('en-US',{month:'long',year:'numeric'})}</div>
+                <div style="height:5px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:8px 0"><div style="height:100%;width:${rate}%;background:var(--gold);border-radius:99px"></div></div>
+                <div class="grid-2" style="gap:5px">
+                    <div class="stat-box"><div class="stat-val">${w}</div><div class="stat-lbl">Days Worked</div></div>
+                    <div class="stat-box"><div class="stat-val">${tot}h</div><div class="stat-lbl">Overtime</div></div>
+                </div>
+            </div>
+            <div class="card">${rw.map(r=>`
+                <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.8rem">
+                    <span>${r.i}</span><span style="flex:1;font-weight:600">${r.l}</span>
+                    <span style="font-weight:700;color:${r.c}">${st[r.k]||0}</span>
+                    <span style="font-size:0.58rem;color:var(--text-muted);width:28px;text-align:right">${all>0?Math.round((st[r.k]||0)/all*100):0}%</span>
+                </div>`).join('')}</div>`;
+            document.getElementById('rp').addEventListener('click', () => { calM--; if (calM < 1) { calM = 12;
+                    calY--; }
+                renRep(el); });
+            document.getElementById('rn').addEventListener('click', () => { calM++; if (calM > 12) { calM = 1;
+                    calY++; }
+                renRep(el); });
+        }
+
+        // Graph
+        function renGraph(el) {
+            let bs = [];
+            for (let i = 20; i >= 0; i--) { const d = new Date();
+                d.setDate(d.getDate() - i); const k = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; const e =
+                    entries[k];
+                bs.push({ day: d.getDate(), s: e?.s || null, o: e?.o || 0 }); }
+            const sc = { present: '#10b981', halfday: '#f59e0b', leave: '#3b82f6', sick: '#8b5cf6', holiday: '#ef4444',
+                off: '#64748b' };
+            const mx = Math.max(...bs.map(b => b.o), 1);
+            el.innerHTML = `
+            <h2 class="section-title">Last 21 Days</h2>
+            <div class="card"><label class="form-label" style="margin-bottom:8px">Attendance</label>
+                <div style="display:flex;align-items:flex-end;gap:2px;height:65px" id="ab"></div>
+                <div class="legend mt-8">${Object.entries(sc).map(([k,c])=>`<span class="legend-item"><span class="legend-dot" style="background:${c}"></span>${k}</span>`).join('')}</div>
+            </div>
+            <div class="card mt-12"><label class="form-label" style="margin-bottom:8px">Overtime</label>
+                <div style="display:flex;align-items:flex-end;gap:2px;height:65px" id="ob"></div>
+            </div>`;
+            document.getElementById('ab').innerHTML = bs.map(b => { const c = b.s ? sc[b.s] || '#64748b' :
+                    'rgba(100,116,139,0.3)'; const h = b.s ? 50 : 4; return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="width:100%;height:${h}px;background:${c};border-radius:2px 2px 0 0"></div><span style="font-size:0.48rem;color:var(--text-muted)">${b.day}</span></div>`; })
+                .join('');
+            document.getElementById('ob').innerHTML = bs.map(b => { const h = Math.max(3, Math.round((b.o / mx) * 50));
+                return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px"><div style="width:100%;height:${h}px;background:var(--gold);border-radius:2px 2px 0 0;opacity:${b.o>0?1:0.2}"></div><span style="font-size:0.48rem;color:var(--text-muted)">${b.day}</span></div>`; })
+                .join('');
+        }
+
+        // Keyboard
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') cm(); });
+
+        console.log('✅ Duty Attendance Pro');
+        console.log('👨‍💻 Samsad Ansari');
+    </script>
+</body>
+</html>
