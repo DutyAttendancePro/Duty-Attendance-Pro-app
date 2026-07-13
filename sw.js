@@ -1,5 +1,5 @@
 // sw.js - Service Worker for Duty Attendance Pro
-const CACHE_NAME = 'duty-attendance-v9';
+const CACHE_NAME = 'duty-attendance-v10';
 const ASSETS = [
   '.',
   'index.html',
