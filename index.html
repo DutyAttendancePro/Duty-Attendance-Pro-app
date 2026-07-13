@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="Duty Attendance Pro" />
   <title>Duty Attendance Pro</title>
 
-  <!-- PWA Manifest (inline) -->
+  <!-- PWA Manifest (inline with proper icons) -->
   <link rel="manifest" href='data:application/manifest+json,{"name":"Duty Attendance Pro","short_name":"DutyPro","description":"Offline-first duty attendance tracker with calendar, shifts, and reports.","start_url":".","display":"standalone","orientation":"portrait","background_color":"#0F1721","theme_color":"#0F1721","categories":["productivity","business","utilities"],"icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 512 512%27%3E%3Crect width=%27512%27 height=%27512%27 rx=%27112%27 fill=%27%230f172a%27/%3E%3Cpath d=%27M144 160h224v208H144z%27 fill=%27%23fff%27/%3E%3Cpath d=%27M176 112h32v72h-32zm128 0h32v72h-32z%27 fill=%27%2338bdf8%27/%3E%3Cpath d=%27M190 274l42 42 92-106%27 fill=%27none%27 stroke=%27%2322c55e%27 stroke-width=%2730%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}' />
 
   <style>
@@ -426,35 +426,89 @@
   }
 
   // ===== PWA: INSTALL PROMPT =====
-  window.addEventListener('beforeinstallprompt', e => {
+  window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     document.getElementById('installBtn').style.display = 'flex';
   });
 
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('installBtn').style.display = 'none';
+    toast('App installed successfully!');
+  });
+
   function installApp() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      deferredPrompt = null;
-      document.getElementById('installBtn').style.display = 'none';
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          toast('App installed!');
+        } else {
+          toast('Installation declined');
+        }
+        deferredPrompt = null;
+        document.getElementById('installBtn').style.display = 'none';
+      });
+    } else {
+      toast('Install prompt not available. Try opening in Chrome or Edge.');
     }
   }
 
-  // ===== SERVICE WORKER REGISTRATION (inline) =====
+  // ===== SERVICE WORKER REGISTRATION =====
   if ('serviceWorker' in navigator) {
+    // Create a proper service worker with caching
     const swCode = `
-      self.addEventListener('install', e => self.skipWaiting());
-      self.addEventListener('activate', e => self.clients.claim());
-      self.addEventListener('fetch', e => {
+      const CACHE_NAME = 'duty-attendance-v2';
+      const ASSETS = ['.'];
+
+      self.addEventListener('install', (e) => {
+        e.waitUntil(
+          caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(ASSETS);
+          }).then(() => self.skipWaiting())
+        );
+      });
+
+      self.addEventListener('activate', (e) => {
+        e.waitUntil(
+          caches.keys().then((keys) => {
+            return Promise.all(
+              keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+            );
+          }).then(() => self.clients.claim())
+        );
+      });
+
+      self.addEventListener('fetch', (e) => {
         e.respondWith(
-          caches.match(e.request).then(r => r || fetch(e.request).catch(() => new Response('Offline', { status: 503 })))
+          caches.match(e.request).then((response) => {
+            if (response) return response;
+            return fetch(e.request).catch(() => {
+              return new Response('Offline - please check connection', { status: 503 });
+            });
+          })
         );
       });
     `;
     const blob = new Blob([swCode], { type: 'text/javascript' });
-    navigator.serviceWorker.register(URL.createObjectURL(blob))
-      .then(() => console.log('SW registered'))
-      .catch(() => console.log('SW registration skipped'));
+    const swUrl = URL.createObjectURL(blob);
+
+    navigator.serviceWorker.register(swUrl, { scope: '.' })
+      .then((reg) => {
+        console.log('Service Worker registered successfully');
+        // Check for updates
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              toast('Update available! Close and reopen app.');
+            }
+          });
+        });
+      })
+      .catch((err) => {
+        console.log('Service Worker registration failed:', err);
+      });
   }
 
   // ===== BOOT =====
